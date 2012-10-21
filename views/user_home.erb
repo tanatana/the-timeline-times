@@ -1,0 +1,24 @@
+<div id="container">
+  <div class="item">
+    <p><a href="http://t.co/3jLE68IP">自衛隊は暴力装置ではない。タコ焼きがタコ焼き器ではないのと同じ。: 極東ブログ</a></p>
+    <img src="http://capture.heartrails.com/200x150/?http://t.co/3jLE68IP" width="200" height="150">
+    <ul>
+      <li>てすとっすよ</li>
+    </ul>
+    <p>Info:</p>
+
+  </div>
+
+  <% @webpages.each do |webpage| %>
+  <div class="item">
+    <p><a href="<%=h webpage.page_url %>" target="_blank"><%=h webpage.page_url %></a></p>
+    <img src="http://fakeimg.pl/200x150/" width="200" height="150">
+    <ul>
+      <% webpage.statuses.each do |status|%>
+      <li><img src="<%=h status.creator.profile_image_url %>" height="42"><p>@<%=h status.creator.screen_name %>/<%=h status.creator.name %>: <%=h status.text %></p><p class="date"><%=h status.posted_at %></p></li>
+      <% end %>
+    </ul>
+    <p>Info:</p>
+  </div>
+  <% end %>
+</div>

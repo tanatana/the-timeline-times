@@ -1,0 +1,75 @@
+body{
+    background-image: url('/css/image/background.png');
+    background-attachment: fixed;
+    padding: 0px 30px;
+}
+
+h1{
+    width: 600px;
+    margin: 70px auto;
+    padding: 13px 0px;
+    text-align: center;
+/*    font-family: 'UnifrakturCook', cursive;*/
+    font-size: 64px;
+    
+    color: #ddd;
+    text-shadow: 1px 1px white, -1px -1px #444;
+}
+
+
+#container{
+    max-width: 1200px;
+    margin: 0px auto;
+    padding: 10px;
+    padding-right: 0px;
+    background-color: rgba(230,230,230, 0.7);
+    border-radius: 10px;
+    border-width: 13px;
+    border-color:  transparent;
+    border-style: solid;
+}
+
+.item {
+  width: 260px;
+  margin: 0px auto 20px;
+  float: left;
+  background-color: #eaeaea;
+  border-radius: 8px;
+}
+
+.item p{
+    clear: both;
+    padding: 5px 10px;
+}
+.item img{
+    display: block;
+    margin: 0px auto 10px auto;
+    
+}
+
+.item ul{
+    background-color: #fff;
+}
+
+.item ul li{
+    padding: 7px 10px;
+    border: 1px #ccc dashed;
+    border-width: 0px 0px 1px 0px;
+    list-style: none;
+}
+.item ul li p{
+    padding: 0px;
+    clear: none;
+    margin-left: 45px;
+}
+.item ul li p.date{
+    text-align: right;
+    color: #999;
+    font-size:small;
+    padding-top: 5px;
+}
+
+.item ul li img{
+    display: block;
+    float: left;
+}
