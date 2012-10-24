@@ -14,7 +14,7 @@ MongoMapper.database = "tltimes"
 class App < Sinatra::Base
   configure do
     include ERB::Util
-  
+
     use Rack::Session::Cookie, :secret => "change me"
     set :logging, true
     set :dump_errors, true
@@ -75,7 +75,7 @@ class App < Sinatra::Base
   get '/users/:screen_name/recent' do
     u =  User.find_by_screen_name(params[:screen_name])
     #    @webpages = Webpage.where(:user_id => u.id, :updated_at.gte => 1.days.ago).sort(:updated_at.desc)
-    @webpages = Webpage.where(:user_id => u.id).sort(:updated_at.desc)
+    @webpages = Webpage.where(:user_id => u.id).sort(:updated_at.desc).limit(100)
     @webpages.each do |page|
       p page.statuses
     end
@@ -88,7 +88,7 @@ class App < Sinatra::Base
     erb :user_home
   end
 
-  
+
   get '/users/*/*/*/*/' do
     "Hello, #{params}"
   end
