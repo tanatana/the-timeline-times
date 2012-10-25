@@ -69,7 +69,7 @@ class App < Sinatra::Base
     session.delete(:request_token)
     session.delete(:request_secret)
 
-    redirect "/users/#{curr_user.screen_name}/"
+    redirect "/users/#{curr_user.screen_name}/recent"
   end
 
   get '/users/:screen_name/recent' do

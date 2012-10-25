@@ -11,6 +11,6 @@ class User
 
   many :statuses
   many :webpages
-  
+  many :articles
   timestamps!
 end
