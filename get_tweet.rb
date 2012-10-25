@@ -42,10 +42,9 @@ User.all().each do |curr_user|
                                       consumer,
                                       curr_user.access_token,
                                       curr_user.access_secret))
-  if Article.count() > 0
-    latest_article = Article.first(:order => :created_at.desc, :user_id => curr_user.id)
-    latest_status = latest_article.statuses.first if latest_article
-  end
+
+  
+  latest_status = Status.first(:user_id => curr_user.id, :order => :created_at.desc)
 
   begin
     raise StatusIsEmpty until latest_status
@@ -62,6 +61,7 @@ User.all().each do |curr_user|
       status.user.rename(:id, :user_id)
       status.user.rename(:id_str, :user_id_str)
       mongo_status = Status.new(status)
+      curr_user.statuses << mongo_status
       mongo_status.save
       urls.each do |url|
         mongo_webpage = Webpage.create(url)
