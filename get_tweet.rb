@@ -43,7 +43,7 @@ User.all().each do |curr_user|
                                       curr_user.access_token,
                                       curr_user.access_secret))
   
-  latest_status = Status.first(:order => :posted_at.desc)
+  latest_status = Article.first(:order => :created_at.desc, :user_id => curr_user.id).statuses.first
   
   begin
     raise StatusIsEmpty until latest_status 
