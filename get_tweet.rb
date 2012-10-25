@@ -15,7 +15,7 @@ class Hash
   def rename(old_sym, new_sym)
     val = self.delete(old_sym)
     self[new_sym] = val
-  end  
+  end
 end
 
 
@@ -36,17 +36,19 @@ end
 
 User.all().each do |curr_user|
   next if curr_user.access_token == nil
-  
+
   rubytter = OAuthRubytter.new(
                OAuth::AccessToken.new(
                                       consumer,
                                       curr_user.access_token,
                                       curr_user.access_secret))
-  
-  latest_status = Article.first(:order => :created_at.desc, :user_id => curr_user.id).statuses.first
-  
+  if Article.count() > 0
+    latest_article = Article.first(:order => :created_at.desc, :user_id => curr_user.id)
+    latest_status = latest_article.statuses.first if latest_article
+  end
+
   begin
-    raise StatusIsEmpty until latest_status 
+    raise StatusIsEmpty until latest_status
     tl = rubytter.home_timeline(:since_id => latest_status.status_id, :count => 200, :include_entities => true)
   rescue StatusIsEmpty
     tl = rubytter.home_timeline(:count => 200, :include_entities => true)
