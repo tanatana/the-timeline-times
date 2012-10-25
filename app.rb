@@ -59,13 +59,13 @@ class App < Sinatra::Base
     # session[:access_token] = access_token.token
     # session[:access_secret] = access_token.secret
     curr_user =  rubytter.user(access_token.params[:user_id])
-    u = User.find_or_create_by_user_id(curr_user.id)
-    u.screen_name = curr_user.screen_name
-    u.name = curr_user.name
-    u.profile_image_url = curr_user.profile_image_url
-    u.access_token = access_token.token
-    u.access_secret= access_token.secret
-    u.save
+    mongo_user = User.find_or_create_by_user_id(curr_user.id)
+    mongo_user.screen_name = curr_user.screen_name
+    mongo_user.name = curr_user.name
+    mongo_user.profile_image_url = curr_user.profile_image_url
+    mongo_user.access_token = access_token.token
+    mongo_user.access_secret= access_token.secret
+    mongo_user.save
 
     session.delete(:request_token)
     session.delete(:request_secret)
@@ -75,11 +75,17 @@ class App < Sinatra::Base
 
   get '/users/:screen_name/recent' do
     u =  User.find_by_screen_name(params[:screen_name])
-    #    @webpages = Webpage.where(:user_id => u.id, :updated_at.gte => 1.days.ago).sort(:updated_at.desc)
-    @webpages = Webpage.where(:user_id => u.id).sort(:updated_at.desc).limit(100)
-    @webpages.each do |page|
-      p page.statuses
+    # @webpages = Webpage.where(:user_id => u.id, :updated_at.gte => 1.days.ago).sort(:updated_at.desc)
+    # @articles = Article.where(:user => u.id).sort(:updated_at.desc).limit(100)
+    @articles = Article.where(:user_id => u.id).sort(:updated_at.desc).limit(100)
+    @articles.each do |article|
+      p article.webpage
+      article.statuses.each do |status|
+        p status.user["screen_name"]
+      end
     end
+    
+    
     erb :user_home
   end
 

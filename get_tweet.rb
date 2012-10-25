@@ -11,6 +11,14 @@ require 'model/article'
 
 class StatusIsEmpty < StandardError; end
 
+class Hash
+  def rename(old_sym, new_sym)
+    val = self.delete(old_sym)
+    self[new_sym] = val
+  end  
+end
+
+
 CONSUMER_KEY, CONSUMER_SECRET = File.open("consumer.cfg").read.split("\n")
 MongoMapper.database = "tltimes"
 
@@ -30,10 +38,10 @@ User.all().each do |curr_user|
   next if curr_user.access_token == nil
   
   rubytter = OAuthRubytter.new(
-                               OAuth::AccessToken.new(
-                                                      consumer,
-                                                      curr_user.access_token,
-                                                      curr_user.access_secret))
+               OAuth::AccessToken.new(
+                                      consumer,
+                                      curr_user.access_token,
+                                      curr_user.access_secret))
   
   latest_status = Status.first(:order => :posted_at.desc)
   
@@ -45,28 +53,29 @@ User.all().each do |curr_user|
   end
 
   tl.each do |status|
-    if urls = status.entities.urls
-      status_owner =  User.find_or_create_by_user_id(status.user.id)
-      status_owner.screen_name = status.user.screen_name
-      status_owner.name = status.user.name
-      status_owner.profile_image_url = status.user.profile_image_url
-      status_owner.save
-    
-      s = Status.find_or_create_by_status_id(status.id)
-      s.creator = status_owner
-      s.posted_at = status.created_at
-      s.text = status.text
-      s.save
+    urls = status.entities.urls
+    if !urls.empty?
+      status.rename(:id, :status_id)
+      status.rename(:id_str, :status_id_str)
+      status.user.rename(:id, :user_id)
+      status.user.rename(:id_str, :user_id_str)
+      mongo_status = Status.new(status)
+      mongo_status.save
       urls.each do |url|
-        wp = Webpage.find_or_create_by_page_url(url.expanded_url)
-        wp.statuses << s
-        wp.user = curr_user
-        wp.save
-        curr_user.webpages << wp
+        mongo_webpage = Webpage.create(url)
+        # TODO: make get_title(url), change this
+        mongo_webpage.title = url.expanded_url
+        mongo_webpage.statuses << mongo_status
+#        mongo_webpage.save
+        mongo_article = Article.find_or_initialize_by_user_id_and_webpage_id(curr_user.id, mongo_webpage.id)
+        mongo_webpage.article = mongo_article
+        mongo_webpage.save
+        mongo_article.statuses << mongo_status
+        mongo_article.save
+        curr_user.articles << mongo_article
+        curr_user.save
       end
-      curr_user.statuses << s
       curr_user.save
     end
-    
   end
 end

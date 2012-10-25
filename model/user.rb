@@ -7,10 +7,10 @@ class User
   key :access_token, String
   key :access_secret, String
 
-  key :active, Boolean, :default => true
+  many :articles
 
+  # for old version
   many :statuses
   many :webpages
-  many :articles
   timestamps!
 end

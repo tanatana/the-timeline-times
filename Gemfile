@@ -5,6 +5,7 @@ source "http://rubygems.org"
 gem "mongo_mapper"
 gem "bson_ext"
 gem "rubytter"
+gem "json"
 
 group :web do
       gem "sinatra"
