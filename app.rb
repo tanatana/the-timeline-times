@@ -79,9 +79,11 @@ class App < Sinatra::Base
     # @articles = Article.where(:user => u.id).sort(:updated_at.desc).limit(100)
     @articles = Article.where(:user_id => u.id).sort(:updated_at.desc).limit(100)
     @articles.each do |article|
-      p article.webpage
-      article.statuses.each do |status|
-        p status.user["screen_name"]
+      begin
+        article.webpage.expanded_url
+      rescue 
+        p "help me!"
+        p article.id
       end
     end
     

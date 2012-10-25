@@ -64,9 +64,9 @@ User.all().each do |curr_user|
       urls.each do |url|
         mongo_webpage = Webpage.create(url)
         # TODO: make get_title(url), change this
-        mongo_webpage.title = url.expanded_url
+        mongo_webpage.title = "title"
         mongo_webpage.statuses << mongo_status
-#        mongo_webpage.save
+        mongo_webpage.save
         mongo_article = Article.find_or_initialize_by_user_id_and_webpage_id(curr_user.id, mongo_webpage.id)
         mongo_webpage.article = mongo_article
         mongo_webpage.save
