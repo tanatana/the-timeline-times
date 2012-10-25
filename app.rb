@@ -7,6 +7,7 @@ require 'erb'
 require 'model/status'
 require 'model/user'
 require 'model/webpage'
+require 'model/article'
 
 CONSUMER_KEY, CONSUMER_SECRET = File.open("consumer.cfg").read.split("\n")
 MongoMapper.database = "tltimes"
