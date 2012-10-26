@@ -9,8 +9,5 @@ class User
 
   many :articles
 
-  # for old version
-  many :statuses
-  many :webpages
   timestamps!
 end

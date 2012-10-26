@@ -43,9 +43,8 @@ User.all().each do |curr_user|
                                       curr_user.access_token,
                                       curr_user.access_secret))
 
-  
-  latest_status = Status.first(:user_id => curr_user.id, :order => :created_at.desc)
 
+  latest_status = Status.first(:user_id => curr_user.id, :order => :created_at.desc)
   begin
     raise StatusIsEmpty until latest_status
     tl = rubytter.home_timeline(:since_id => latest_status.status_id, :count => 200, :include_entities => true)
@@ -61,16 +60,16 @@ User.all().each do |curr_user|
       status.user.rename(:id, :user_id)
       status.user.rename(:id_str, :user_id_str)
       mongo_status = Status.new(status)
-      curr_user.statuses << mongo_status
       mongo_status.save
       urls.each do |url|
+        puts urls
         mongo_webpage = Webpage.create(url)
         # TODO: make get_title(url), change this
         mongo_webpage.title = "title"
         mongo_webpage.statuses << mongo_status
         mongo_webpage.save
         mongo_article = Article.find_or_initialize_by_user_id_and_webpage_id(curr_user.id, mongo_webpage.id)
-        mongo_webpage.article = mongo_article
+        mongo_webpage.articles << mongo_article
         mongo_webpage.save
         mongo_article.statuses << mongo_status
         mongo_article.save
