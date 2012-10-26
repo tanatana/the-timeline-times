@@ -1,7 +1,7 @@
 <div id="container">
   <% @articles.each do |article| %>
     <div class="item">
-      <p><a href="<%=h article.webpage.expanded_url %>" target="_blank"><%=h article.webpage.title %></a></p>
+      <p><a href="<%=h article.webpage.expanded_url %>" target="_blank"><%=h article.webpage.display_url %></a></p>
       <img src="http://fakeimg.pl/200x150/" width="200" height="150">
       <ul>
         <% article.statuses.each do |status|%>
