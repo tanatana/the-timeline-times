@@ -61,4 +61,49 @@ class App < Sinatra::Base
     @webpages = Webpage.where(:user_id => u.id, :updated_at.gte => 1.days.ago).sort(:updated_at.desc)
     erb :user_home
   end
+
+  get '/api/articles/recent' do
+    #------------------------------------------------
+    # API Parameters
+    # screen_name
+    # per_page
+    # page
+    #------------------------------------------------
+    page = 1 if params[page] == nil
+    per_page = 30 if params[per_page] == nil
+    
+    if params[:screen_name] == nil
+      "please set user"
+    else
+      params[:screen_name]
+      u =  User.find_by_screen_name(params[:screen_name])
+      @articles = Array.new
+      Article.paginate({
+                         :order => :updated_at.desc,
+                         :per_page => per_page,
+                         :page => page,
+                         :user_id => u.id
+                       }).each do |mongo_article|
+        article = Hash.new
+        mongo_article.as_json.each do |key, val|
+          case key
+          when 'webpage_id'
+            article['webpage'] = Webpage.find(val).as_json
+          when 'user_id'
+            article['user'] = User.find(val).as_json
+          when 'status_ids'
+            statuses = Array.new
+            val.each do |status_id|
+              statuses << Status.find(status_id).as_json
+            end
+            article['statuses'] = statuses.as_json
+          else
+            article[key] = val
+          end
+        end
+        @articles << article
+      end
+      @articles.to_json
+    end
+  end
 end
