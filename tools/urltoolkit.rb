@@ -1,6 +1,21 @@
 module UrlToolKit
+  def expand_url(url)
+    url = URI(url)
+    Net::HTTP.start(url.host, url.port) {|http|
+      response = http.head(url.request_uri)
+      case response
+      when Net::HTTPRedirection
+        expand_url(response['location'])
+      else
+        return url
+      end
+      }
+  end
+
   def get_thumb(url_str)
-    url = URI(url_str)
+    url = expand_url(url_str)
+    puts "url: #{url}"
+
     case url.host
     when "instagram.com"
       url.to_s+"media/?size=l"

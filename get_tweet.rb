@@ -40,12 +40,13 @@ User.all().each do |curr_user|
                                       curr_user.access_secret))
 
   latest_status = Status.first(:user_id => curr_user.id, :order => :created_at.desc)
-  begin
-    raise StatusIsEmpty until latest_status
-    tl = rubytter.home_timeline(:since_id => latest_status.status_id, :count => 200, :include_entities => true)
-  rescue StatusIsEmpty
-    tl = rubytter.home_timeline(:count => 200, :include_entities => true)
-  end
+  # begin
+  #   raise StatusIsEmpty until latest_status
+  #   tl = rubytter.home_timeline(:since_id => latest_status.status_id, :count => 200, :include_entities => true)
+  # rescue StatusIsEmpty
+  #   tl = rubytter.home_timeline(:count => 200, :include_entities => true)
+  # end
+  tl = rubytter.home_timeline(:count => 200, :include_entities => true)
 
   tl.each do |status|
     urls = status.entities.urls
@@ -59,7 +60,17 @@ User.all().each do |curr_user|
       urls.each do |url|
         url.remove(:indices)
         mongo_webpage = Webpage.create(url)
-        mongo_webpage.thumb = get_thumb(url.expanded_url)
+        begin
+          mongo_webpage.thumb = get_thumb(url.expanded_url)
+        rescue Timeout::Error, Errno::ECONNRESET, EOFError
+          mongo_webpage.thumb = "http://fakeimg.pl/200x150/"
+        # rescue Errno::ECONNRESET
+        #   mongo_webpage.thumb = "http://fakeimg.pl/200x150/"
+        # rescue EOFError
+        #   mongo_webpage.thumb = "http://fakeimg.pl/200x150/"
+          
+        end
+        
         # TODO: make get_title(url), change this
         mongo_webpage.title = "title"
         mongo_webpage.statuses << mongo_status
