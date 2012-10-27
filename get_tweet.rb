@@ -8,6 +8,8 @@ require 'model/status'
 require 'model/user'
 require 'model/webpage'
 require 'model/article'
+require 'tools/urltoolkit'
+include UrlToolKit
 
 class StatusIsEmpty < StandardError; end
 
@@ -17,7 +19,6 @@ class Hash
     self[new_sym] = val
   end
 end
-
 
 CONSUMER_KEY, CONSUMER_SECRET = File.open("consumer.cfg").read.split("\n")
 MongoMapper.database = "tltimes"
@@ -37,7 +38,6 @@ User.all().each do |curr_user|
                                       consumer,
                                       curr_user.access_token,
                                       curr_user.access_secret))
-
 
   latest_status = Status.first(:user_id => curr_user.id, :order => :created_at.desc)
   begin
@@ -59,6 +59,7 @@ User.all().each do |curr_user|
       urls.each do |url|
         url.remove(:indices)
         mongo_webpage = Webpage.create(url)
+        mongo_webpage.thumb = get_thumb(url.expanded_url)
         # TODO: make get_title(url), change this
         mongo_webpage.title = "title"
         mongo_webpage.statuses << mongo_status
