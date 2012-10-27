@@ -1,7 +1,10 @@
 module UrlToolKit
   def expand_url(url)
     url = URI(url)
-    Net::HTTP.start(url.host, url.port) {|http|
+    http = Net::HTTP.new(url.host, url.port)
+    http.open_timeout = 3
+    http.read_timeout = 7
+    http.start() {|http|
       response = http.head(url.request_uri)
       case response
       when Net::HTTPRedirection
@@ -14,8 +17,6 @@ module UrlToolKit
 
   def get_thumb(url_str)
     url = expand_url(url_str)
-    puts "url: #{url}"
-
     case url.host
     when "instagram.com"
       url.to_s+"media/?size=l"
