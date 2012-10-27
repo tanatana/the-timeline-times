@@ -75,12 +75,9 @@ class App < Sinatra::Base
 
   get '/users/:screen_name/recent' do
     u =  User.find_by_screen_name(params[:screen_name])
-    # @webpages = Webpage.where(:user_id => u.id, :updated_at.gte => 1.days.ago).sort(:updated_at.desc)
-    # @articles = Article.where(:user => u.id).sort(:updated_at.desc).limit(100)
-    # @articles = Article.where(:user_id => u.id).sort(:updated_at.desc).limit(100)
     @articles = Article.paginate({
         :order => :updated_at.desc,
-        :per_page => 30,
+        :per_page => 50,
         :page => 1,
       })
     @articles.each do |article|
@@ -92,7 +89,7 @@ class App < Sinatra::Base
       end
     end
 
-
+    @articles.reverse!
     erb :user_home
   end
 

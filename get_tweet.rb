@@ -29,11 +29,6 @@ def consumer
                       :site => "http://api.twitter.com")
 end
 
-def find_URLs(text)
-  URI.extract(text, %w[http])
-end
-
-
 User.all().each do |curr_user|
   next if curr_user.access_token == nil
 
@@ -62,7 +57,7 @@ User.all().each do |curr_user|
       mongo_status = Status.new(status)
       mongo_status.save
       urls.each do |url|
-        puts urls
+        url.remove(:indices)
         mongo_webpage = Webpage.create(url)
         # TODO: make get_title(url), change this
         mongo_webpage.title = "title"
