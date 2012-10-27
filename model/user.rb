@@ -6,7 +6,7 @@ class User
   key :name, String
   key :access_token, String
   key :access_secret, String
-  key :latest_status_id, :default => 0
+  key :latest_status_id, :default => 1
   
   many :articles
 
