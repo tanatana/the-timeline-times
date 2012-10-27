@@ -66,7 +66,7 @@ User.all().each do |curr_user|
         begin
           mongo_webpage =  Webpage.first(:expanded_url => url.expanded_url)
           raise DocumentIsNOTExist if mongo_webpage == nil
-          TODO: make get_title(url), change this
+          # TODO: make get_title(url), change this
           mongo_webpage.statuses << mongo_status
           mongo_webpage.save
           mongo_article = Article.find_or_initialize_by_user_id_and_webpage_id(curr_user.id, mongo_webpage.id)
