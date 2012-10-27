@@ -1,16 +1,12 @@
 # -*- coding: utf-8 -*-
-
 $:.unshift File.dirname(__FILE__)
 Bundler.require(:default, :web)
+require 'database'
 require 'pp'
 require 'erb'
-require 'model/status'
-require 'model/user'
-require 'model/webpage'
-require 'model/article'
 
 CONSUMER_KEY, CONSUMER_SECRET = File.open("consumer.cfg").read.split("\n")
-MongoMapper.database = "tltimes"
+
 
 class App < Sinatra::Base
   configure do

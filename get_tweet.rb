@@ -1,18 +1,10 @@
 # -*- coding: utf-8 -*-
-
 $:.unshift File.dirname(__FILE__)
 Bundler.require(:default)
 require 'pp'
 require "uri"
-require 'model/status'
-require 'model/user'
-require 'model/webpage'
-require 'model/article'
+require 'database'
 require 'tools/urltoolkit'
-
-
-class DocumentIsNOTExist < StandardError; end
-class StatusIsEmpty < StandardError; end
 
 class Hash
   def rename(old_sym, new_sym)
@@ -22,7 +14,6 @@ class Hash
 end
 
 CONSUMER_KEY, CONSUMER_SECRET = File.open("consumer.cfg").read.split("\n")
-MongoMapper.database = "tltimes"
 
 def consumer
   OAuth::Consumer.new(
