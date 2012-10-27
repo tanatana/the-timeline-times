@@ -5,12 +5,14 @@ source "http://rubygems.org"
 gem "mongo_mapper"
 gem "bson_ext"
 gem "rubytter"
+gem "omniauth"
+gem "omniauth-twitter"
 gem "json"
 
 group :web do
       gem "sinatra"
       gem "shotgun"
 end
-      
+
 # gem "nokogiri"
 # gem "mechanize"
