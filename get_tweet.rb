@@ -40,18 +40,8 @@ User.all().each do |curr_user|
                                       curr_user.access_token,
                                       curr_user.access_secret))
   # うまく取得数が制限できない
-  # latest_article = Article.first(:user_id => curr_user.id, :order => :updated_at.desc)
-  # p latest_article
-  # begin
-  #   raise StatusIsEmpty until latest_article
-  #   latest_status = latest_article.status_ids.first
-  #   p latest_status_id = Status.find(latest_status).status_id
-  #   tl = rubytter.home_timeline(:since_id => latest_status_id, :count => 200, :include_entities => true)
-  # rescue StatusIsEmpty => e
-  #   p e
-  #   tl = rubytter.home_timeline(:count => 200, :include_entities => true)
-  # end
-  tl = rubytter.home_timeline(:count => 200, :include_entities => true)
+  tl = rubytter.home_timeline(:since_id => curr_user.latest_status_id, :count => 200, :include_entities => true)
+  # tl = rubytter.home_timeline(:count => 200, :include_entities => true)
 
   tl.each do |status|
     urls = status.entities.urls
@@ -60,6 +50,11 @@ User.all().each do |curr_user|
       status.rename(:id_str, :status_id_str)
       status.user.rename(:id, :user_id)
       status.user.rename(:id_str, :user_id_str)
+      if curr_user.latest_status_id < status.status_id
+        curr_user.latest_status_id =  status.status_id
+        curr_user.save
+      end
+  
       if mongo_status = Status.first(:status_id => status.id)
         next
       else
@@ -71,7 +66,7 @@ User.all().each do |curr_user|
         begin
           mongo_webpage =  Webpage.first(:expanded_url => url.expanded_url)
           raise DocumentIsNOTExist if mongo_webpage == nil
-          # TODO: make get_title(url), change this
+          TODO: make get_title(url), change this
           mongo_webpage.statuses << mongo_status
           mongo_webpage.save
           mongo_article = Article.find_or_initialize_by_user_id_and_webpage_id(curr_user.id, mongo_webpage.id)
