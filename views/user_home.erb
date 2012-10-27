@@ -2,7 +2,7 @@
   <% @articles.each do |article| %>
     <div class="item">
       <p><a href="<%=h article.webpage.expanded_url %>" target="_blank"><%=h article.webpage.display_url %></a></p>
-      <img src="http://fakeimg.pl/200x150/" width="200" height="150">
+      <a href="<%=h article.webpage.expanded_url %>"><img src="<%=h article.webpage.thumb %>" width="200" height="150"></a>
       <ul>
         <% article.statuses.each do |status|%>
         <li><img src="<%=h status.user["profile_image_url"] %>" height="42"><p>@<%=h status.user["screen_name"] %>/<%=h status.user["name"] %>: <%=h status.text %></p><p class="date"><%=h status.created_at %></p></li>
