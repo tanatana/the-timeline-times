@@ -44,16 +44,17 @@ User.all().each do |curr_user|
   # tl = rubytter.home_timeline(:count => 200, :include_entities => true)
 
   tl.each do |status|
+    if curr_user.latest_status_id < status.id
+      curr_user.latest_status_id =  status.id
+      curr_user.save
+    end
+
     urls = status.entities.urls
     if !urls.empty?
       status.rename(:id, :status_id)
       status.rename(:id_str, :status_id_str)
       status.user.rename(:id, :user_id)
       status.user.rename(:id_str, :user_id_str)
-      if curr_user.latest_status_id < status.status_id
-        curr_user.latest_status_id =  status.status_id
-        curr_user.save
-      end
   
       if mongo_status = Status.first(:status_id => status.id)
         next
