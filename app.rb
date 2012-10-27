@@ -48,6 +48,7 @@ class App < Sinatra::Base
         :order => :updated_at.desc,
         :per_page => 50,
         :page => 1,
+        :user_id => u.id
       })
 
     @title = u.screen_name
