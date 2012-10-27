@@ -89,7 +89,7 @@ class App < Sinatra::Base
       end
     end
 
-    @articles
+    @articles.reverse!
     erb :user_home
   end
 
