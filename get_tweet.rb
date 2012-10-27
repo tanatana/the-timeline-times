@@ -9,7 +9,7 @@ require 'model/user'
 require 'model/webpage'
 require 'model/article'
 require 'tools/urltoolkit'
-include UrlToolKit
+
 
 class DocumentIsNOTExist < StandardError; end
 class StatusIsEmpty < StandardError; end
@@ -55,7 +55,7 @@ User.all().each do |curr_user|
       status.rename(:id_str, :status_id_str)
       status.user.rename(:id, :user_id)
       status.user.rename(:id_str, :user_id_str)
-  
+
       if mongo_status = Status.first(:status_id => status.id)
         next
       else
@@ -64,30 +64,27 @@ User.all().each do |curr_user|
       end
       urls.each do |url|
         url.remove(:indices)
-        begin
-          mongo_webpage =  Webpage.first(:expanded_url => url.expanded_url)
-          raise DocumentIsNOTExist if mongo_webpage == nil
-          # TODO: make get_title(url), change this
-          mongo_webpage.statuses << mongo_status
-          mongo_webpage.save
-          mongo_article = Article.find_or_initialize_by_user_id_and_webpage_id(curr_user.id, mongo_webpage.id)
-          mongo_webpage.articles << mongo_article
-          mongo_webpage.save
-          mongo_article.statuses << mongo_status
-          mongo_article.save
-          curr_user.articles << mongo_article
-          curr_user.save
-        rescue DocumentIsNOTExist
+        mongo_webpage = Webpage.first(:expanded_url => url.expanded_url)
+        if mongo_webpage == nil
           mongo_webpage = Webpage.create(url)
           begin
-            mongo_webpage.thumb = get_thumb(url.expanded_url)
+            mongo_webpage.thumb = UrlToolKit.get_thumb(url.expanded_url)
           rescue Timeout::Error, Errno::ECONNRESET, EOFError, Errno::ECONNREFUSED => e
             mongo_webpage.thumb = "http://fakeimg.pl/200x150/"
           end
           mongo_webpage.title = "title"
           mongo_webpage.save
-          retry
         end
+        # TODO: make get_title(url), change this
+        mongo_webpage.statuses << mongo_status
+        mongo_webpage.save
+        mongo_article = Article.find_or_initialize_by_user_id_and_webpage_id(curr_user.id, mongo_webpage.id)
+        mongo_webpage.articles << mongo_article
+        mongo_webpage.save
+        mongo_article.statuses << mongo_status
+        mongo_article.save
+        curr_user.articles << mongo_article
+        curr_user.save
       end
       curr_user.save
     end

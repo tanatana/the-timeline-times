@@ -1,5 +1,5 @@
 module UrlToolKit
-  def expand_url(url)
+  def self.expand_url(url)
     url = URI(url)
     http = Net::HTTP.new(url.host, url.port)
     http.open_timeout = 3
@@ -12,10 +12,10 @@ module UrlToolKit
       else
         return url
       end
-      }
+    }
   end
 
-  def get_thumb(url_str)
+  def self.get_thumb(url_str)
     url = expand_url(url_str)
     case url.host
     when "instagram.com"
