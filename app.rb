@@ -90,6 +90,8 @@ class App < Sinatra::Base
     end
 
     @articles
+    @title = u.screen_name
+    @page_type = "recent"
     erb :user_home
   end
 
