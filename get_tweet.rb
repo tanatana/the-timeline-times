@@ -76,7 +76,7 @@ User.all().each do |curr_user|
           mongo_webpage = Webpage.create(url)
           begin
             mongo_webpage.thumb = get_thumb(url.expanded_url)
-          rescue Timeout::Error, Errno::ECONNRESET, EOFError, Error::ECONNREFUSED
+          rescue Timeout::Error, Errno::ECONNRESET, EOFError, Errno::ECONNREFUSED
             mongo_webpage.thumb = "http://fakeimg.pl/200x150/"
           end
           mongo_webpage.title = "title"
