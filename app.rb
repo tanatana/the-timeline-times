@@ -43,11 +43,16 @@ class App < Sinatra::Base
   end
 
   get '/users/:screen_name/recent' do
+    params[:page] = 1 if params[:page]  == nil || params[:page].to_i < 1
+    params[:per_page] = 50 if params[:per_page]  == nil || params[:per_page].to_i < 1
+
+    @page = params[:page]
+    @per_page = params[:per_page]
     u =  User.find_by_screen_name(params[:screen_name])
     @articles = Article.paginate({
         :order => :updated_at.desc,
-        :per_page => 50,
-        :page => 1,
+        :per_page => @per_page,
+        :page => @page,
         :user_id => u.id
       })
 

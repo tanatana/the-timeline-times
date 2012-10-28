@@ -12,3 +12,11 @@
     </div>
   <% end %>
 </div>
+<% if  @articles.size == @per_page %>
+<div class="row-fluid footer">
+  <div class="span3"></div>
+  <div class="span6">
+    <a href="/users/side_tana/recent?page=<%=h @page.to_i + 1 %>" class="btn btn-large btn-block btn-primary" id="next">次のページ</a>
+  </div>
+</div>
+<% end %>

@@ -7,7 +7,11 @@ body{
     padding-right: 15px;
 }
 
-.header *{
+.navbar-fixed-top .navbar-inner a i{
+    margin-top: 2px;
+}
+
+.header{
     margin: 90px auto 70px auto;
 }
 .header h1{
@@ -78,4 +82,12 @@ body{
 .item ul li img{
     display: block;
     float: left;
+}
+
+.footer{
+    margin: 50px 0px;
+}
+.footer a#next.btn{
+    display: block;
+    width: 100%;
 }
