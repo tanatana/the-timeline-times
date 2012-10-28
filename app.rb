@@ -48,15 +48,15 @@ class App < Sinatra::Base
 
     @page = params[:page]
     @per_page = params[:per_page]
-    user =  User.find_by_screen_name(params[:screen_name])
-    return unless user
-    @articles = user.articles.paginate({
+    @user =  User.find_by_screen_name(params[:screen_name])
+    return unless @user
+    @articles = @user.articles.paginate({
         :order => :updated_at.desc,
         :per_page => @per_page,
         :page => @page,
       })
 
-    @title = user.screen_name
+    @title = @user.screen_name
     @page_type = "recent"
     erb :user_home
   end

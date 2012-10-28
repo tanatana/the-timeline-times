@@ -1,22 +1,22 @@
 <div id="container">
   <% @articles.each do |article| %>
-    <div class="item">
-      <p><a href="<%=h article.webpage.expanded_url %>" target="_blank"><%=h article.webpage.display_url %></a></p>
-      <a href="<%=h article.webpage.expanded_url %>"><img src="<%=h article.webpage.thumb %>" width="200" height="150"></a>
-      <ul>
-        <% article.statuses.each do |status|%>
-        <li><img src="<%=h status.user["profile_image_url"] %>" height="42"><p>@<%=h status.user["screen_name"] %>/<%=h status.user["name"] %>: <%=h status.text %></p><p class="date"><%=h status.created_at %></p></li>
-        <% end %>
-      </ul>
-      <p>Article Updated At <%=h article.updated_at %></p>
-    </div>
+  <div class="item">
+    <p><a href="<%=h article.webpage.expanded_url %>" target="_blank"><%=h article.webpage.display_url %></a></p>
+    <a href="<%=h article.webpage.expanded_url %>"><img src="<%=h article.webpage.thumb %>" width="200" height="150"></a>
+    <ul>
+      <% article.statuses.each do |status|%>
+      <li><img src="<%=h status.user["profile_image_url"] %>" height="42"><p>@<%=h status.user["screen_name"] %>/<%=h status.user["name"] %>: <%=h status.text %></p><p class="date"><%=h status.created_at %></p></li>
+      <% end %>
+    </ul>
+    <p>Article Updated At <%=h article.updated_at %></p>
+  </div>
   <% end %>
 </div>
 <% if  @articles.size == @per_page %>
 <div class="row-fluid footer">
   <div class="span3"></div>
   <div class="span6">
-    <a href="/users/side_tana/recent?page=<%=h @page.to_i + 1 %>" class="btn btn-large btn-block btn-primary" id="next">次のページ</a>
+    <a href="/users/<%= @user.screen_name %>/recent?page=<%=h @page.to_i + 1 %>" class="btn btn-large btn-block btn-primary" id="next">次のページ</a>
   </div>
 </div>
 <% end %>
