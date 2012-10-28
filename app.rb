@@ -48,22 +48,23 @@ class App < Sinatra::Base
 
     @page = params[:page]
     @per_page = params[:per_page]
-    u =  User.find_by_screen_name(params[:screen_name])
-    @articles = Article.paginate({
+    user =  User.find_by_screen_name(params[:screen_name])
+    return unless user
+    @articles = user.articles.paginate({
         :order => :updated_at.desc,
         :per_page => @per_page,
         :page => @page,
-        :user_id => u.id
       })
 
-    @title = u.screen_name
+    @title = user.screen_name
     @page_type = "recent"
     erb :user_home
   end
 
   get '/users/:screen_name' do
-    u =  User.find_by_screen_name(params[:screen_name])
-    @webpages = Webpage.where(:user_id => u.id, :updated_at.gte => 1.days.ago).sort(:updated_at.desc)
+    user =  User.find_by_screen_name(params[:screen_name])
+    return unless user
+    @webpages = user.articles.where(:updated_at.gte => 1.days.ago).sort(:updated_at.desc)
     erb :user_home
   end
 
@@ -78,12 +79,12 @@ class App < Sinatra::Base
     per_page = 30 if params[per_page] == nil
 
     return "please set user" unless params[:screen_name]
-    u =  User.find_by_screen_name(params[:screen_name])
-    Article.paginate({
+    user =  User.find_by_screen_name(params[:screen_name])
+    return unless user
+    user.articles.paginate({
         :order => :updated_at.desc,
         :per_page => per_page,
         :page => page,
-        :user_id => u.id
       }).to_json(:include => [:webpage, :statuses, :user])
   end
 end
