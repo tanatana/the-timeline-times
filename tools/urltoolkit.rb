@@ -16,7 +16,7 @@ module UrlToolKit
   end
 
   def self.get_thumb(url_str)
-    url = expand_url(url_str)
+    url = URI(url_str)
     case url.host
     when "instagram.com"
       url.to_s+"media/?size=l"

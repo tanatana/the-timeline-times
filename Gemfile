@@ -7,6 +7,7 @@ gem "bson_ext"
 gem "rubytter"
 gem "omniauth"
 gem "omniauth-twitter"
+gem "ruby-oembed"
 gem "json"
 
 group :web do

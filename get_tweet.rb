@@ -5,6 +5,7 @@ require 'pp'
 require "uri"
 require 'database'
 require 'tools/urltoolkit'
+require 'oembed'
 
 class Hash
   def rename(old_sym, new_sym)
@@ -59,9 +60,17 @@ User.all().each do |curr_user|
         if mongo_webpage == nil
           mongo_webpage = Webpage.create(url)
           begin
-            mongo_webpage.thumb = UrlToolKit.get_thumb(url.expanded_url)
+            expanded_url = UrlToolKit.expand_url(url.expanded_url).to_s
           rescue Timeout::Error, Errno::ECONNRESET, EOFError, Errno::ECONNREFUSED => e
-            mongo_webpage.thumb = "http://fakeimg.pl/200x150/"
+            expanded_url = url.expanded_url
+          end
+          begin
+            embed = OEmbed::Providers::Embedly.get(expanded_url)
+            pp embed
+            mongo_webpage.embed = embed.html
+          rescue OEmbed::NotFound, OEmbed::UnknownResponse
+            mongo_webpage.thumb = UrlToolKit.get_thumb(expanded_url)
+            # mongo_webpage.thumb = "http://fakeimg.pl/200x150/"
           end
           mongo_webpage.title = "title"
           mongo_webpage.save
