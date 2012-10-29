@@ -6,6 +6,7 @@ require "uri"
 require 'database'
 require 'tools/urltoolkit'
 require 'oembed'
+require 'restclient'
 
 class Hash
   def rename(old_sym, new_sym)
@@ -65,12 +66,22 @@ User.all().each do |curr_user|
         unless mongo_webpage = Webpage.first(:expanded_url => expanded_url)
           mongo_webpage = Webpage.create(:expanded_url => expanded_url)
           begin
-            embed = OEmbed::Providers::Embedly.get(expanded_url)
-            pp embed
-            mongo_webpage.embed = embed.html
-          rescue OEmbed::NotFound, OEmbed::UnknownResponse
-            mongo_webpage.thumb = UrlToolKit.get_thumb(expanded_url)
-            # mongo_webpage.thumb = "http://fakeimg.pl/200x150/"
+            content = RestClient.get(expanded_url).body
+          rescue
+            content = nil
+          end
+
+          if content and og = OpenGraph.parse(content)
+            mongo_webpage.opengraph = og.to_hash
+          else
+            begin
+              embed = OEmbed::Providers::Embedly.get(expanded_url)
+              pp embed
+              mongo_webpage.embed = embed.html
+            rescue OEmbed::NotFound, OEmbed::UnknownResponse
+              mongo_webpage.thumb = UrlToolKit.get_thumb(expanded_url)
+              # mongo_webpage.thumb = "http://fakeimg.pl/200x150/"
+            end
           end
           mongo_webpage.title = "title"
           mongo_webpage.save

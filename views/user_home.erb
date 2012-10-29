@@ -7,7 +7,9 @@
       </a>
     </p>
     <a href="<%=h article.webpage.expanded_url %>">
-      <% if article.webpage.embed %>
+      <% if article.webpage.opengraph %>
+      <img src="<%=h article.webpage.opengraph['image'] %>">
+      <% elsif article.webpage.embed %>
       <%= article.webpage.embed %>
       <% else %>
       <img src="<%=h article.webpage.thumb %>" width="200" height="150">
