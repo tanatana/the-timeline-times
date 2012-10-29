@@ -9,6 +9,7 @@ gem "omniauth"
 gem "omniauth-twitter"
 gem "ruby-oembed"
 gem "json"
+gem "thin"
 
 group :web do
       gem "sinatra"
