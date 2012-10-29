@@ -56,14 +56,14 @@ User.all().each do |curr_user|
       end
       urls.each do |url|
         url.remove(:indices)
-        mongo_webpage = Webpage.first(:expanded_url => url.expanded_url)
-        if mongo_webpage == nil
-          mongo_webpage = Webpage.create(url)
-          begin
-            expanded_url = UrlToolKit.expand_url(url.expanded_url).to_s
-          rescue Timeout::Error, Errno::ECONNRESET, EOFError, Errno::ECONNREFUSED => e
-            expanded_url = url.expanded_url
-          end
+        begin
+          expanded_url = UrlToolKit.expand_url(url.expanded_url).to_s
+        rescue Timeout::Error, Errno::ECONNRESET, EOFError, Errno::ECONNREFUSED => e
+          expanded_url = url.expanded_url.to_s
+        end
+
+        unless mongo_webpage = Webpage.first(:expanded_url => expanded_url)
+          mongo_webpage = Webpage.create(:expanded_url => expanded_url)
           begin
             embed = OEmbed::Providers::Embedly.get(expanded_url)
             pp embed
@@ -75,7 +75,7 @@ User.all().each do |curr_user|
           mongo_webpage.title = "title"
           mongo_webpage.save
         end
-        # TODO: make get_title(url), change this
+
         mongo_webpage.statuses << mongo_status
         mongo_webpage.save
         mongo_article = Article.find_or_initialize_by_user_id_and_webpage_id(curr_user.id, mongo_webpage.id)
