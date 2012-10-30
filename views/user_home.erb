@@ -1,6 +1,7 @@
 <div id="container">
   <% @articles.each do |article| %>
   <div class="item">
+    <h3><%=h article.webpage.title %></h3>
     <p>
       <a href="<%=h article.webpage.expanded_url %>" target="_blank">
         <%=h article.webpage.expanded_url[0..30] %>

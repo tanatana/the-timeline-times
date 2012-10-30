@@ -7,6 +7,8 @@ require 'database'
 require 'tools/urltoolkit'
 require 'oembed'
 require 'restclient'
+require 'nokogiri'
+require 'nkf'
 
 class Hash
   def rename(old_sym, new_sym)
@@ -65,6 +67,8 @@ User.all().each do |curr_user|
 
         unless mongo_webpage = Webpage.first(:expanded_url => expanded_url)
           mongo_webpage = Webpage.create(:expanded_url => expanded_url)
+          title = ''
+
           begin
             content = RestClient.get(expanded_url).body
           rescue
@@ -73,7 +77,15 @@ User.all().each do |curr_user|
 
           if content and og = OpenGraph.parse(content)
             mongo_webpage.opengraph = og.to_hash
+            title = og['title']
           else
+            if content
+              doc = Nokogiri::HTML.parse(content)
+              title = doc.css("title").text
+            else
+              title = "untitled"
+            end
+
             begin
               embed = OEmbed::Providers::Embedly.get(expanded_url)
               pp embed
@@ -83,7 +95,7 @@ User.all().each do |curr_user|
               # mongo_webpage.thumb = "http://fakeimg.pl/200x150/"
             end
           end
-          mongo_webpage.title = "title"
+          mongo_webpage.title = NKF.nkf("-w", title)
           mongo_webpage.save
         end
 
