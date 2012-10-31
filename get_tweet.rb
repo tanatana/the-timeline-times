@@ -6,7 +6,6 @@ require "uri"
 require 'database'
 require 'tools/urltoolkit'
 require 'oembed'
-require 'restclient'
 require 'nokogiri'
 require 'nkf'
 
@@ -70,16 +69,20 @@ User.all().each do |curr_user|
           title = ''
 
           begin
-            content = RestClient.get(expanded_url).body
+            url = URI.parse(expanded_url)
+            response = Net::HTTP.start(url.host, url.port){|io| io.get(url.request_uri)}
           rescue
-            content = nil
+            response = nil
           end
 
-          if content and og = OpenGraph.parse(content)
-            mongo_webpage.opengraph = og.to_hash
-            title = og['title']
-          else
-            if content
+          pp response['content-type']
+          case response['content-type']
+          when /text\/html/
+            content = response.body
+            if content and og = OpenGraph.parse(content)
+              mongo_webpage.opengraph = og.to_hash
+              title = og['title']
+            elsif content
               doc = Nokogiri::HTML.parse(content)
               title = doc.css("title").text
             else
@@ -88,14 +91,16 @@ User.all().each do |curr_user|
 
             begin
               embed = OEmbed::Providers::Embedly.get(expanded_url)
-              pp embed
               mongo_webpage.embed = embed.html
             rescue OEmbed::NotFound, OEmbed::UnknownResponse
               mongo_webpage.thumb = UrlToolKit.get_thumb(expanded_url)
               # mongo_webpage.thumb = "http://fakeimg.pl/200x150/"
             end
+            mongo_webpage.title = NKF.nkf("-w", title)
+          when /image\/.*/
+            mongo_webpage.title = "image"
+            mongo_webpage.thumb = expanded_url
           end
-          mongo_webpage.title = NKF.nkf("-w", title)
           mongo_webpage.save
         end
 
