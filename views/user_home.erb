@@ -17,7 +17,7 @@
       <% end %>
     </a>
     <ul>
-      <% article.statuses.each do |status|%>
+      <% article.statuses.reverse.each do |status|%>
       <li><img src="<%=h status.user["profile_image_url"] %>" height="42"><p>@<%=h status.user["screen_name"] %>/<%=h status.user["name"] %>: <%=h status.text %></p><p class="date"><%=h status.created_at %></p></li>
       <% end %>
     </ul>
