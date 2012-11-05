@@ -118,10 +118,8 @@ User.all().each do |curr_user|
 
         # Article_in_dateクラスはひとつのUserと複数のAticleを持つ
         # UserのObjectIDと日付でその日にTL上で言及があったすべてのArticle_idが引けるようにする
-        now = Time.now
-        date_begin = Time.utc(now.year, now.mon, now.day)
-        date_end = Time.utc(now.year, now.mon, now.day, 23, 59, 59)
-        mongo_articles_in_dates = Articles_in_date.where(:created_at => {:$gt => date_begin, :$lt => date_end}).find_or_initialize_by_user_id(curr_user.id)
+        today = Time.now
+        mongo_articles_in_dates = Articles_in_date.find_or_initialize_by_user_id_and_year_and_mon_and_day(curr_user.id, today.year, today.mon, today.day)
         # FIXME: 同じObjectIDがarticlesに無い場合のみ追加するように
         mongo_articles_in_dates.articles << mongo_article
         mongo_articles_in_dates.articles.uniq!
