@@ -33,14 +33,17 @@ User.all().each do |curr_user|
                                       consumer,
                                       curr_user.access_token,
                                       curr_user.access_secret))
-  # うまく取得数が制限できない
-  tl = rubytter.home_timeline(:since_id => curr_user.latest_status_id, :count => 200, :include_entities => true)
-  # tl = rubytter.home_timeline(:count => 200, :include_entities => true)
 
+  # 逆にしておかないと，DBに入れるときにエラーが起きた際の最新ツイートがおかしくなる
+  tl = rubytter.home_timeline(:since_id => curr_user.latest_status_id, :count => 200, :include_entities => true).reverse
+  # tl = rubytter.home_timeline(:count => 200, :include_entities => true).reverse
+  
   tl.each do |status|
     if curr_user.latest_status_id < status.id
       curr_user.latest_status_id =  status.id
       curr_user.save
+    else
+      next
     end
 
     urls = status.entities.urls
@@ -49,6 +52,7 @@ User.all().each do |curr_user|
       status.rename(:id_str, :status_id_str)
       status.user.rename(:id, :user_id)
       status.user.rename(:id_str, :user_id_str)
+      status[:created_at] = Time.parse(status.created_at)
 
       if mongo_status = Status.first(:status_id => status.id)
         next
