@@ -7,7 +7,7 @@
         <%=h article.webpage.title ? article.webpage.title : article.webpage.expanded_url[0..30] %>
       </a>
     </p>
-    <a href="<%=h article.webpage.expanded_url %>">
+    <a href="<%=h article.webpage.expanded_url %>" target="_blank">
       <% if article.webpage.opengraph != {} %>
       <img src="<%=h article.webpage.opengraph['image'] %>">
       <% elsif article.webpage.embed %>
