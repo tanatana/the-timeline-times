@@ -3,6 +3,7 @@ $:.unshift File.dirname(__FILE__)
 Bundler.require(:default, :web)
 require 'database'
 require 'omniauth'
+require 'time'
 require 'pp'
 require 'erb'
 
@@ -65,6 +66,33 @@ class App < Sinatra::Base
     user =  User.find_by_screen_name(params[:screen_name])
     return unless user
     @webpages = user.articles.where(:updated_at.gte => 1.days.ago).sort(:updated_at.desc)
+    erb :user_home
+  end
+
+  get '/users/:screen_name/:year/:mon/:day/' do
+    params[:page] = 1 if params[:page]  == nil || params[:page].to_i < 1
+    params[:per_page] = 50 if params[:per_page]  == nil || params[:per_page].to_i < 1
+
+    @page = params[:page]
+    @per_page = params[:per_page]
+    @user =  User.find_by_screen_name(params[:screen_name])
+    return unless @user
+
+    begin
+      p date_begin = Time.parse("#{params[:year]}-#{params[:mon]}-#{params[:day]} 00:00:00 +0900")
+      p date_end   = Time.parse("#{params[:year]}-#{params[:mon]}-#{params[:day]} 23:59:59 +0900")
+    rescue => e
+      return e.to_s
+    end
+
+    @articles = @user.articles.where(:updated_at => {:$gt => date_begin, :$lt => date_end}).paginate({
+        :order => :updated_at.desc,
+        :per_page => @per_page,
+        :page => @page,
+      })
+
+    @title = @user.screen_name
+    @page_type = "recent"
     erb :user_home
   end
 
