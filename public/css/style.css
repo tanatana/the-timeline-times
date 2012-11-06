@@ -21,8 +21,9 @@ body{
     font-size: 64px;
     line-height: 1;
     
-    color: #ddd;
-    text-shadow: 1px 1px white, -1px -1px #444;
+    color: #51391e;
+    opacity: 0.6;
+    text-shadow: 1px 1px #c3a078, -1px -1px #291d0f;
 }
 
 
