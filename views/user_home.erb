@@ -1,12 +1,11 @@
 <div id="container">
   <% @articles.each do |article| %>
   <div class="item <%= "collum#{article.statuses.length <= 4 ? article.statuses.length : 4}" %>">
-    <h3></h3>
-    <p>
+    <h3>
       <a href="<%=h article.webpage.expanded_url %>" target="_blank">
         <%=h article.webpage.title ? article.webpage.title : article.webpage.expanded_url[0..30] %>
       </a>
-    </p>
+    </h3>
     <a href="<%=h article.webpage.expanded_url %>" target="_blank">
       <% if article.webpage.opengraph != {} %>
       <img src="<%=h article.webpage.opengraph['image'] %>">

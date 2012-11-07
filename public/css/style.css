@@ -12,7 +12,9 @@ body{
 }
 
 .header{
+    position: fixed;
     margin: 90px auto 70px auto;
+    z-index: -10;
 }
 .header h1{
     margin: 0px auto;
@@ -20,7 +22,6 @@ body{
 /*    font-family: 'UnifrakturCook', cursive;*/
     font-size: 64px;
     line-height: 1;
-    
     color: #51391e;
     opacity: 0.6;
     text-shadow: 1px 1px #c3a078, -1px -1px #291d0f;
@@ -29,10 +30,11 @@ body{
 
 #container{
 /*    max-width: 1200px; */
-    margin: 0px auto;
+    margin: 260px auto 0px auto;
     padding: 10px;
-    padding-right: 0px;
+    padding-right: 0px;    
     background-color: rgba(204,204,204, 0.7);
+    background-image: url('image/cream_dust.png');
     border-radius: 10px;
     border-width: 13px;
     border-color:  transparent;
@@ -42,10 +44,13 @@ body{
 .item {
   width: 260px;
   margin: 0px auto 20px;
-  border: 0px double #666;
+  padding-top: 1px;
+  border: 0px solid #333;
+  border-width: 3px 0px 0px 0px;
   float: left;
   background-color: #eaeaea;
-  border-radius: 8px;
+  background-image: url('image/fabric.png');
+  border-radius: 0px 0px 8px 8px
 }
 
 .item.collum2{
@@ -65,6 +70,13 @@ body{
     display: block;
     margin: 0px auto 10px auto;
     
+}
+.item h3{
+    font-size: 13px;
+    line-height: 1;
+    border: 0px solid #333;
+    border-width: 1px 0px 0px 0px;
+    padding: 10px 10px;
 }
 
 .item ul{
