@@ -8,6 +8,7 @@ require 'tools/urltoolkit'
 require 'oembed'
 require 'nokogiri'
 require 'nkf'
+require 'net/https'
 
 class Hash
   def rename(old_sym, new_sym)
@@ -37,7 +38,7 @@ User.all().each do |curr_user|
   # 逆にしておかないと，DBに入れるときにエラーが起きた際の最新ツイートがおかしくなる
   tl = rubytter.home_timeline(:since_id => curr_user.latest_status_id, :count => 200, :include_entities => true).reverse
   # tl = rubytter.home_timeline(:count => 200, :include_entities => true).reverse
-  
+
   tl.each do |status|
     if curr_user.latest_status_id < status.id
       curr_user.latest_status_id =  status.id
@@ -74,8 +75,15 @@ User.all().each do |curr_user|
 
           begin
             url = URI.parse(expanded_url)
-            response = Net::HTTP.start(url.host, url.port){|io| io.get(url.request_uri)}
-          rescue
+            http = Net::HTTP.new(url.host, url.port)
+            if url.port == 443
+              http.use_ssl = true
+              http.verify_mode = OpenSSL::SSL::VERIFY_NONE
+            end
+
+            response = http.start{|io| io.get(url.request_uri)}
+          rescue => e
+            pp e
             response = nil
           end
 
