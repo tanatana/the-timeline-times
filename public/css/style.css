@@ -17,8 +17,6 @@ body{
 }
 
 .row-fluid{
-    background-image: url('image/cream_dust.png');
-    border-radius: 10px;
 }
 
 .row-fluid.header{
@@ -44,6 +42,7 @@ body{
 
 .row-fluid.top{
     background-image: none;
+    border-radius: 10px;
     margin: 90px auto 0px auto;
 }
 
@@ -61,6 +60,8 @@ body{
 }
 
 .row-fluid.body{
+    background-image: url('image/cream_dust.png');
+    border-radius: 10px;
     margin-bottom: 30px;
 }
 
