@@ -13,7 +13,8 @@ class App < Sinatra::Base
   configure do
     include ERB::Util
 
-    use Rack::Session::Cookie, :secret => "change me"
+    use Rack::Session::Cookie, :secret => "change me",
+                               :expire_after => 3600 * 24 * 2
     set :logging, true
     set :dump_errors, true
     set :show_exceptions, true
@@ -23,10 +24,25 @@ class App < Sinatra::Base
     provider :twitter, CONSUMER_KEY, CONSUMER_SECRET
   end
 
-  get '/' do
-    erb :index
-  end
+  helpers do
+    def pull_articles(user, params)
+      return unless user.class ==  User
+      if params.class != Hash
+        params = Hash.new
+        params[:page] = 1 if params[:page]  == nil || params[:page].to_i < 1
+        params[:per_page] = 50 if params[:per_page]  == nil || params[:per_page].to_i < 1
+      end
 
+      @page = params[:page]
+      @per_page = params[:per_page]
+      user.articles.paginate({
+                               :order => :updated_at.desc,
+                               :per_page => @per_page,
+                               :page => @page,
+                             })
+    end
+  end
+  
   get '/auth/twitter/callback' do
     auth = request.env["omniauth.auth"]
     access_token = auth["extra"]["access_token"]
@@ -40,34 +56,25 @@ class App < Sinatra::Base
     mongo_user.access_secret= access_token.secret
     mongo_user.save
 
-    redirect "/users/#{curr_user.screen_name}/recent"
+    session[:screen_name] = curr_user.screen_name
+    
+    redirect "/"
+  end
+
+  get '/' do
+    erb :index unless session[:screen_name]
+    @user =  User.find_by_screen_name(session[:screen_name])
+    return unless @user
+    @articles = pull_articles(@user, "test")
+    
+    @title = @user.screen_name
+    @page_type = "recent"
+    @next_page_url = "/?page=#{@page.to_i + 1}"
+    erb :user_home
   end
 
   get '/users/:screen_name/recent' do
-    # TODO: どっかにまとめる
-    params[:page] = 1 if params[:page]  == nil || params[:page].to_i < 1
-    params[:per_page] = 50 if params[:per_page]  == nil || params[:per_page].to_i < 1
-
-    @page = params[:page]
-    @per_page = params[:per_page]
-    @user =  User.find_by_screen_name(params[:screen_name])
-    return unless @user
-    @articles = @user.articles.paginate({
-        :order => :updated_at.desc,
-        :per_page => @per_page,
-        :page => @page,
-      })
-
-    @title = @user.screen_name
-    @page_type = "recent"
-    erb :user_home
-  end
-
-  get '/users/:screen_name' do
-    user =  User.find_by_screen_name(params[:screen_name])
-    return unless user
-    @webpages = user.articles.where(:updated_at.gte => 1.days.ago).sort(:updated_at.desc)
-    erb :user_home
+    "move to '/'(require sign-in)"
   end
 
   get '/users/:screen_name/:year/:mon/:day/' do    
@@ -87,7 +94,6 @@ class App < Sinatra::Base
                                             :year => params[:year].to_i,
                                             :mon => params[:mon].to_i,
                                             :day => params[:day].to_i}).articles
-    @articles
     # @articles = @user.articles.where(:updated_at => {:$gt => date_begin, :$lt => date_end}).paginate({
     #     :order => :updated_at.desc,
     #     :per_page => @per_page,
