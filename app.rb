@@ -74,7 +74,7 @@ class App < Sinatra::Base
     
     @title = @user.screen_name
     @page_type = "recent"
-    @next_page_url = "/home/?page=#{@page.to_i + 1}"
+    @next_page_url = "/home?page=#{@page.to_i + 1}"
     erb :user_home
 
   end
