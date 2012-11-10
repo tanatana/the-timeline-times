@@ -73,7 +73,7 @@ body{
     background-image: url('image/fabric.png');
 }
 
-.footer{
+.index-footer{
     color: #f9f9f9;
     background-color: #999;
     background-image: url('/css/image/background.png');
@@ -83,13 +83,13 @@ body{
     padding-bottom: 50px;
 
 }
-.footer a{
+.index-footer a{
     color: #fff;
 }
-.footer a:hover{
+.index-footer a:hover{
     color: orange;
 }
-.footer .row-fluid{
+.index-footer .row-fluid{
     background-image: none;   
 }
 /*--------------------------------------------------*/
@@ -173,4 +173,11 @@ body{
 .item ul li img{
     display: block;
     float: left;
+}
+.footer{
+    margin: 50px 0px;
+}
+.footer a#next.btn{
+    display: block;
+    width: 100%;
 }
