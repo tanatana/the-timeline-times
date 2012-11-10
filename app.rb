@@ -62,9 +62,9 @@ class App < Sinatra::Base
   end
 
   get '/' do
-    erb :index unless session[:screen_name]
+    return erb :index unless session[:screen_name]
     @user =  User.find_by_screen_name(session[:screen_name])
-    return unless @user
+    return erb :index unless @user
     @articles = pull_articles(@user, "test")
     
     @title = @user.screen_name
@@ -112,16 +112,17 @@ class App < Sinatra::Base
     # per_page
     # page
     #------------------------------------------------
-    page = 1 if params[page] == nil
-    per_page = 30 if params[per_page] == nil
+    # page = 1 if params[page] == nil
+    # per_page = 30 if params[per_page] == nil
 
-    return "please set user" unless params[:screen_name]
-    user =  User.find_by_screen_name(params[:screen_name])
-    return unless user
-    user.articles.paginate({
-        :order => :updated_at.desc,
-        :per_page => per_page,
-        :page => page,
-      }).to_json(:include => [:webpage, :statuses, :user])
+    # return "please set user" unless params[:screen_name]
+    # user =  User.find_by_screen_name(params[:screen_name])
+    # return unless user
+    # user.articles.paginate({
+    #     :order => :updated_at.desc,
+    #     :per_page => per_page,
+    #     :page => page,
+    #   }).to_json(:include => [:webpage, :statuses, :user])
+    "このAPIはセキュリティ上の問題が報告されているため一時的に利用できません"
   end
 end
