@@ -25,6 +25,15 @@ class App < Sinatra::Base
   end
 
   helpers do
+    def current_user
+      @current_user ||= User.find_by_screen_name(session[:screen_name])
+    end
+
+    def login?
+      return unless session[:screen_name] or current_user
+      return true
+    end
+
     def verify_params(params)
       if params.class != Hash
         params = Hash.new
@@ -34,7 +43,6 @@ class App < Sinatra::Base
       params[:per_page] = 50 if params[:per_page]  == nil || params[:per_page].to_i < 1
       params
     end
-
   end
 
   get '/auth/twitter/callback' do
@@ -55,19 +63,16 @@ class App < Sinatra::Base
   end
 
   get '/' do
-    redirect 'home' if  session[:screen_name]
+    redirect 'home' if login?
     erb :index
   end
 
   get '/home' do
-    redirect '/' unless session[:screen_name]
-
-    @user = User.find_by_screen_name(session[:screen_name])
-    redirect '/' unless @user
-
+    redirect '/' unless login?
     params = verify_params(params)
-    @articles = @user.retrieve_articles(params)
-    @title = @user.screen_name
+
+    @articles = current_user.retrieve_articles(params)
+    @title = current_user.screen_name
     @page_type = "recent"
     @has_next_page = (@articles.size == params[:per_page])
     @next_page_url = "/home?page=#{params[:page] + 1}" if @has_next_page
@@ -92,15 +97,10 @@ class App < Sinatra::Base
 
     # FIXME: ページネイトできてない
     @articles = Articles_in_date.first({
-                                            :user_id => @user.id,
-                                            :year => params[:year].to_i,
-                                            :mon => params[:mon].to_i,
-                                            :day => params[:day].to_i}).articles
-    # @articles = @user.articles.where(:updated_at => {:$gt => date_begin, :$lt => date_end}).paginate({
-    #     :order => :updated_at.desc,
-    #     :per_page => @per_page,
-    #     :page => @page,
-    #   })
+        :user_id => @user.id,
+        :year => params[:year].to_i,
+        :mon => params[:mon].to_i,
+        :day => params[:day].to_i}).articles
 
     @title = @user.screen_name
     @page_type = "recent"
@@ -108,23 +108,6 @@ class App < Sinatra::Base
   end
 
   get '/api/articles/recent' do
-    #------------------------------------------------
-    # API Parameters
-    # screen_name
-    # per_page
-    # page
-    #------------------------------------------------
-    # page = 1 if params[page] == nil
-    # per_page = 30 if params[per_page] == nil
-
-    # return "please set user" unless params[:screen_name]
-    # user =  User.find_by_screen_name(params[:screen_name])
-    # return unless user
-    # user.articles.paginate({
-    #     :order => :updated_at.desc,
-    #     :per_page => per_page,
-    #     :page => page,
-    #   }).to_json(:include => [:webpage, :statuses, :user])
     "このAPIはセキュリティ上の問題が報告されているため一時的に利用できません"
   end
 end
