@@ -11,4 +11,12 @@ class User
   many :articles
 
   timestamps!
+
+  def retrieve_articles(params)
+    self.articles.paginate({
+                             :order => :updated_at.desc,
+                             :per_page => params[:per_page],
+                             :page => params[:page],
+                           })
+  end
 end
