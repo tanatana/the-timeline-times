@@ -29,14 +29,14 @@ class App < Sinatra::Base
       if params.class != Hash
         params = Hash.new
       end
-      
+
       params[:page] = 1 if params[:page]  == nil || params[:page].to_i < 1
       params[:per_page] = 50 if params[:per_page]  == nil || params[:per_page].to_i < 1
       params
     end
 
   end
-  
+
   get '/auth/twitter/callback' do
     auth = request.env["omniauth.auth"]
     access_token = auth["extra"]["access_token"]
@@ -62,24 +62,24 @@ class App < Sinatra::Base
   get '/home' do
     redirect '/' unless session[:screen_name]
 
-    @user =  User.find_by_screen_name(session[:screen_name])
+    @user = User.find_by_screen_name(session[:screen_name])
     redirect '/' unless @user
 
     params = verify_params(params)
-    @per_page = params[:per_page]
     @articles = @user.retrieve_articles(params)
     @title = @user.screen_name
     @page_type = "recent"
-    @next_page_url = "/home?page=#{params[:page] + 1}"
-    erb :user_home
+    @has_next_page = (@articles.size == params[:per_page])
+    @next_page_url = "/home?page=#{params[:page] + 1}" if @has_next_page
 
+    erb :user_home
   end
 
   get '/users/:screen_name/recent' do
     "move to '/'(require sign-in)"
   end
 
-  get '/users/:screen_name/:year/:mon/:day/' do    
+  get '/users/:screen_name/:year/:mon/:day/' do
     # TODO: どっかにまとめる
     params[:page] = 1 if params[:page]  == nil || params[:page].to_i < 1
     params[:per_page] = 50 if params[:per_page]  == nil || params[:per_page].to_i < 1
