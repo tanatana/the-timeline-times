@@ -67,13 +67,15 @@ class App < Sinatra::Base
   end
 
   get '/home' do
+    p params[:page]
     redirect '/' unless session[:screen_name]
     @user =  User.find_by_screen_name(session[:screen_name])
     redirect '/' unless @user
-    @articles = pull_articles(@user, "test")
+    @articles = pull_articles(@user, params)
     
     @title = @user.screen_name
     @page_type = "recent"
+    p @page
     @next_page_url = "/home?page=#{@page.to_i + 1}"
     erb :user_home
 
