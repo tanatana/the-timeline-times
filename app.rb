@@ -25,22 +25,16 @@ class App < Sinatra::Base
   end
 
   helpers do
-    def pull_articles(user, params)
-      return unless user.class ==  User
+    def verify_params(params)
       if params.class != Hash
         params = Hash.new
-        params[:page] = 1 if params[:page]  == nil || params[:page].to_i < 1
-        params[:per_page] = 50 if params[:per_page]  == nil || params[:per_page].to_i < 1
       end
-
-      @page = params[:page]
-      @per_page = params[:per_page]
-      user.articles.paginate({
-                               :order => :updated_at.desc,
-                               :per_page => @per_page,
-                               :page => @page,
-                             })
+      
+      params[:page] = 1 if params[:page]  == nil || params[:page].to_i < 1
+      params[:per_page] = 50 if params[:per_page]  == nil || params[:per_page].to_i < 1
+      params
     end
+
   end
   
   get '/auth/twitter/callback' do
@@ -57,7 +51,6 @@ class App < Sinatra::Base
     mongo_user.save
 
     session[:screen_name] = curr_user.screen_name
-    
     redirect "/"
   end
 
@@ -67,16 +60,17 @@ class App < Sinatra::Base
   end
 
   get '/home' do
-    p params[:page]
     redirect '/' unless session[:screen_name]
+
     @user =  User.find_by_screen_name(session[:screen_name])
     redirect '/' unless @user
-    @articles = pull_articles(@user, params)
-    
+
+    params = verify_params(params)
+    @per_page = params[:per_page]
+    @articles = @user.retrieve_articles(params)
     @title = @user.screen_name
     @page_type = "recent"
-    p @page
-    @next_page_url = "/home?page=#{@page.to_i + 1}"
+    @next_page_url = "/home?page=#{params[:page] + 1}"
     erb :user_home
 
   end
