@@ -34,14 +34,10 @@ class App < Sinatra::Base
       return true
     end
 
-    def verify_params(params)
-      if params.class != Hash
-        params = Hash.new
-      end
-
-      params[:page] = 1 if params[:page]  == nil || params[:page].to_i < 1
-      params[:per_page] = 50 if params[:per_page]  == nil || params[:per_page].to_i < 1
-      params
+    def paginate_options(params)
+      opts = {:page => 1, :per_page => 50}
+      opts.each{|k, v| opts[k] = params[k].to_i if params[k] and params[k].to_i > 0}
+      opts
     end
   end
 
@@ -69,13 +65,13 @@ class App < Sinatra::Base
 
   get '/home' do
     redirect '/' unless login?
-    params = verify_params(params)
+    opts = paginate_options(params)
 
-    @articles = current_user.retrieve_articles(params)
+    @articles = current_user.retrieve_articles(opts)
     @title = current_user.screen_name
     @page_type = "recent"
-    @has_next_page = (@articles.size == params[:per_page])
-    @next_page_url = "/home?page=#{params[:page] + 1}" if @has_next_page
+    @has_next_page = (@articles.size == opts[:per_page])
+    @next_page_url = "/home?page=#{opts[:page] + 1}" if @has_next_page
 
     erb :user_home
   end
