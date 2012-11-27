@@ -94,7 +94,8 @@ class App < Sinatra::Base
         :day => params[:day].to_i}).articles
 
     @articles = articles_in_date[((opts[:page] - 1) * 50)..((opts[:page] * 50) - 1)]
-    
+    @has_next_page = (@articles.size == opts[:per_page])
+    @next_page_url = "/home/#{params[:year]}/#{params[:mon]}/#{params[:day]}?page=#{opts[:page] + 1}" if @has_next_page
     erb :user_home
   end
 
