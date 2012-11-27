@@ -91,7 +91,7 @@ class App < Sinatra::Base
         :user_id => current_user.id,
         :year => params[:year].to_i,
         :mon => params[:mon].to_i,
-        :day => params[:day].to_i}).articles
+        :day => params[:day].to_i}).articles.reverse
 
     @articles = articles_in_date[((opts[:page] - 1) * 50)..((opts[:page] * 50) - 1)]
     @has_next_page = (@articles.size == opts[:per_page])
