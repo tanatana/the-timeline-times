@@ -6,9 +6,14 @@
 article h3{
     border: 0px #08c solid;
     border-width: 0px 0px 0px 5px;
-    padding: 5px 0px 3px 5px;
+    padding: 9px 0px 3px 5px;
     margin-bottom: 5px;
+    line-height: 1.2;
 }
+article .article-image-container{
+    overflow: hidden;
+}
+
 article .article-image-container h3{
     display: none;
 }
@@ -17,7 +22,6 @@ article .tweet-list{
     margin-left: 0px;
     padding-left: 7px;
 }
-
 article .tweet img{
     float: left;
 }
@@ -32,10 +36,6 @@ article .footer{
     clear:left;
     text-align: right;
 }
-
-/* article-detail
-------------------------- */
-
 
 /* Responsive
 -------------------------------------------------- */
@@ -52,7 +52,7 @@ article .footer{
     h3{
         font-size: 28px;
     }
-    article .article-image{
+    article .article-image-container{
         width: 300px;
         float: left;
     }
@@ -70,7 +70,7 @@ article .footer{
     h3{
         font-size: 24px;
     }
-    article .article-image{
+    article .article-image-container{
         width: 240px;
         float: left;
     }
@@ -92,7 +92,7 @@ article .footer{
     h3{
         font-size: 22px;
     }
-    article .article-image{
+    article .article-image-container{
         width: 180px;
         float: left;
     }
@@ -111,7 +111,7 @@ article .footer{
     h3{
         font-size: 18px;
     }
-    article .article-image{
+    article .article-image-container{
         width: 160px;
         float: left;
     }
