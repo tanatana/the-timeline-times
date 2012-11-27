@@ -1,40 +1,75 @@
-<div class="row-fluid header">
-  <div class="span3"></div>
-  <div class="span6"><h1><%=h "@#{@title}" %><% if @page_type %><%=h "'s #{@page_type}" %><% end %></h1></div>
-  <div class="span3"></div>
-</div>
-
-<div id="container">
-  <% @articles.each do |article| %>
-  <div class="item <%= "collum#{article.statuses.length <= 4 ? article.statuses.length : 4}" %>">
-       <h3>
-         <a href="<%=h article.webpage.expanded_url %>" target="_blank">
-           <%=h article.webpage.title ? article.webpage.title : article.webpage.expanded_url[0..30] %>
-         </a>
-       </h3>
-       <a href="<%=h article.webpage.expanded_url %>" target="_blank">
-         <% if article.webpage.opengraph != {} %>
-         <img src="<%=h article.webpage.opengraph['image'] %>">
-         <% elsif article.webpage.embed %>
-         <%= article.webpage.embed %>
-         <% else %>
-         <img src="<%=h article.webpage.thumb %>" width="100%">
-         <% end %>
-       </a>
-       <ul>
-         <% article.statuses.reverse.each do |status|%>
-         <li><img src="<%=h status.user["profile_image_url"] %>" height="42"><p>@<%=h status.user["screen_name"] %>/<%=h status.user["name"] %>: <%=h status.text %></p><p class="date"><%=h status.created_at %></p></li>
-         <% end %>
-       </ul>
-       <p>Article Updated At <%=h article.updated_at %></p>
-</div>
-<% end %>
-</div>
-<% if @has_next_page %>
-<div class="row-fluid footer">
-  <div class="span3"></div>
-  <div class="span6">
-    <a href="<%=h @next_page_url %>" class="btn btn-large btn-block btn-primary" id="next">次のページ</a>
+<div class="container-fluid">
+  <div class="row-fluid">
+    <div class="span12">
+      <h1>Username's TIMELINE TIMES</h1>
+    </div>
   </div>
+  <div class="row-fluid">
+    <div class="span3">
+      <div class="accordion" id="sidemenu">
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#sidemenu" href="#collapseOne">
+              表示オプション
+            </a>
+          </div>
+          <div id="collapseOne" class="accordion-body collapse in">
+            <div class="accordion-inner">
+              Anim pariatur cliche...
+            </div>
+          </div>
+        </div>
+        <div class="accordion-group">
+          <div class="accordion-heading">
+            <a class="accordion-toggle" data-toggle="collapse" data-parent="#sidemenu" href="#collapseTwo">
+              カレンダー
+            </a>
+          </div>
+          <div id="collapseTwo" class="accordion-body collapse">
+            <div class="accordion-inner">
+              Anim pariatur cliche...
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="span9">
+      <% @articles.each do |article| %>
+      <article>
+        <h3>
+          <a href="<%=h article.webpage.expanded_url %>" target="_blank">
+            <%=h article.webpage.title ? article.webpage.title : article.webpage.expanded_url[0..30] %>
+          </a>
+        </h3>
+        <div class="article-image-container">
+          <a href="<%=h article.webpage.expanded_url %>" target="_blank">
+            <% if article.webpage.opengraph != {} %>
+            <img src="<%=h article.webpage.opengraph['image'] %>" class="article-image">
+            <% elsif article.webpage.embed %>
+            <%= article.webpage.embed %>
+            <% else %>
+            <img src="<%=h article.webpage.thumb %>" width="100%" class="article-image">
+            <% end %>
+            <h3><%=h article.webpage.title ? article.webpage.title : article.webpage.expanded_url[0..20] %></h3>
+          </a>
+
+        </div>
+        <ul class="tweet-list">
+          <% article.statuses.reverse.each do |status|%>
+          <li class="tweet"><img src="<%=h status.user["profile_image_url"] %>" height="42"><p>@<%=h status.user["screen_name"] %>/<%=h status.user["name"] %><br> <%=h status.text %></p><p class="date"><%=h status.created_at %></p></li>
+          <% end %>
+        </ul>
+        <div class="footer">Article Updated At <%=h article.updated_at %> / view detail</div>
+      </article>
+      <% end %>
+    </div>
+  </div>
+  <% if @has_next_page %>
+    
+  <div class="row-fluid footer">
+    <div class="span6 offset3">
+      <a href="<%=h @next_page_url %>" id="next">次のページ</a>
+    </div>
+  </div>
+  <% end %>
 </div>
-<% end %>

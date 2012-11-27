@@ -6,40 +6,41 @@
       The Timeline Times
       <% if @title %><%=h "| @#{@title}" %><% if @page_type %><%=h "'s #{@page_type}" %><% end %><% end %>
     </title>
-    <link rel="stylesheet" type="text/css" href="/css/reset.css" media="all">
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css" media="all">
-    <link rel="stylesheet" type="text/css" href="/css/style.css" media="all">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/bootstrap-responsive.css">
+    <link rel="stylesheet" type="text/css" href="/css/style.css">
 
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.7.1/jquery.min.js"></script>
-    <script type="text/javascript" src="/js/jquery.masonry.min.js"></script>
     <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-    <script type="text/javascript" src="/js/the-timeline-times.js"></script>
+<!--    <script type="text/javascript" src="/js/the-timeline-times.js"></script> -->
   </head>
   <body>
-    <div class="container-fluid">
-
-      <div class="navbar navbar-fixed-top">
-        <div class="navbar-inner">
-          <a class="brand" href="/">the Timeline Times</a>
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container-fluid">
+          <a class="brand" href="/">The TIMELINE TIMES</a>
           <ul class="nav pull-right">
-            <li><a href="#">@user_name</a></li>
-            <li><a data-toggle="dropdown" class="dropdown-toggle" role="button" id="drop3" href="#"><i class="icon-list"></i></a>
-              <ul aria-labelledby="drop3" role="menu" class="dropdown-menu">
-                <li><a href="#" tabindex="-1">項目1</a></li>
-                <li><a href="#" tabindex="-1">項目2</a></li>
-                <li><a href="#" tabindex="-1">項目</a></li>
+            <li class="dropdown">
+              <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                メニュー
+                <b class="caret"></b>
+              </a>
+              <ul class="dropdown-menu">
+                <li><a href="/setting">設定</a></li>
                 <li class="divider"></li>
-                <li><a href="#" tabindex="-1">設定</a></li>
+                <li><a href="/about_this_service">このサービスについて</a></li>
                 <li class="divider"></li>
-                <li><a href="#" tabindex="-1">About this application</a></li>
-
+                <% if login? %>
+                <li><a href="/logout">ログアウト</a></li>
+                <% else %>
+                <li><a href="/auth/twitter">ログイン</a></li>
+                <% end %>
               </ul>
             </li>
           </ul>
         </div>
       </div>
-
-      <%= yield %>
     </div>
+    <%= yield %>
   </body>
 </html>
