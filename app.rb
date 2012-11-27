@@ -63,15 +63,18 @@ class App < Sinatra::Base
     erb :index
   end
 
-  get '/home' do
+  before '/home*' do
     redirect '/' unless login?
+  end  
+
+  get '/home' do
     opts = paginate_options(params)
 
     @articles = current_user.retrieve_articles(opts)
     @title = current_user.screen_name
     @has_next_page = (@articles.size == opts[:per_page])
     @next_page_url = "/home?page=#{opts[:page] + 1}" if @has_next_page
-
+    
     erb :user_home
   end
 
@@ -81,30 +84,26 @@ class App < Sinatra::Base
     erb :article_detail
   end
 
-  get '/users/:screen_name/recent' do
-    "move to '/'(require sign-in)"
-  end
+  get '/home/:year/:mon/:day' do
+    opts = paginate_options(params)
 
-  get '/users/:screen_name/:year/:mon/:day/' do
-    # TODO: どっかにまとめる
-    params[:page] = 1 if params[:page]  == nil || params[:page].to_i < 1
-    params[:per_page] = 50 if params[:per_page]  == nil || params[:per_page].to_i < 1
-
-    @page = params[:page]
-    @per_page = params[:per_page]
-    @user =  User.find_by_screen_name(params[:screen_name])
-    return unless @user
-
-
-    # FIXME: ページネイトできてない
-    @articles = Articles_in_date.first({
-        :user_id => @user.id,
+    articles_in_date = Articles_in_date.first({
+        :user_id => current_user.id,
         :year => params[:year].to_i,
         :mon => params[:mon].to_i,
         :day => params[:day].to_i}).articles
 
-    @title = @user.screen_name
+    @articles = articles_in_date[((opts[:page] - 1) * 50)..((opts[:page] * 50) - 1)]
+    
     erb :user_home
+  end
+
+  get '/users/:screen_name/recent' do
+    "move to '/home'(require sign-in)"
+  end
+
+  get '/users/:screen_name/:year/:mon/:day/' do
+    "move to '/home/:year/:mon/:day'(require sign-in)"
   end
 
   get '/api/articles/recent' do
