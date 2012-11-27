@@ -106,4 +106,9 @@ class App < Sinatra::Base
   get '/api/articles/recent' do
     "このAPIはセキュリティ上の問題が報告されているため一時的に利用できません"
   end
+
+  get '/logout' do
+    session.delete(:screen_name)
+    redirect '/'
+  end
 end
