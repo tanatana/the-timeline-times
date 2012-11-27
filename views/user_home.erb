@@ -55,8 +55,9 @@
 
         </div>
         <ul class="tweet-list">
-          <% article.statuses.reverse.each do |status|%>
+          <% article.statuses.reverse.each_with_index do |status,i|%>
           <li class="tweet"><img src="<%=h status.user["profile_image_url"] %>" height="42"><p>@<%=h status.user["screen_name"] %>/<%=h status.user["name"] %><br> <%=h status.text %></p><p class="date"><%=h status.created_at %></p></li>
+          <% break if i >= 2 %>
           <% end %>
         </ul>
         <div class="footer">Article Updated At <%=h article.updated_at %> / view detail</div>
