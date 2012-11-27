@@ -55,7 +55,9 @@
           <% break if i >= 2 %>
           <% end %>
         </ul>
-        <div class="footer">Article Updated At <%=h article.updated_at %> / <a href="/home/<%=h article.id %>">view detail</a></div>
+        <div class="footer">Article Updated At <%=h article.updated_at %>
+          / <a href="/home/<%=h article.id %>"><%=h article.statuses.size > 3 ? "他に #{article.statuses.size - 3} 件のつぶやきがあります" : "詳細を見る" %></a>
+        </div>
       </article>
       <% end %>
     </div>
