@@ -1,4 +1,8 @@
 @charset "utf-8";
+
+
+/* home
+------------------------- */
 article h3{
     border: 0px #08c solid;
     border-width: 0px 0px 0px 5px;
@@ -29,6 +33,9 @@ article .footer{
     text-align: right;
 }
 
+/* article-detail
+------------------------- */
+
 
 /* Responsive
 -------------------------------------------------- */
@@ -37,7 +44,10 @@ article .footer{
 ------------------------- */
 @media (min-width: 1201px) {
     body{
-        padding-top: 40px;
+        padding-top: 60px;
+    }
+    .navbar-fixed-top{
+        margin-bottom: 10px;
     }
     h3{
         font-size: 28px;
@@ -55,7 +65,7 @@ article .footer{
 ------------------------- */
 @media (min-width: 980px) and (max-width: 1199px) {
     body{
-        padding-top: 40px;
+        padding-top: 60px;
     }
     h3{
         font-size: 24px;
@@ -67,6 +77,10 @@ article .footer{
     article .tweet-list{
         margin-left: 240px;
     }
+
+    #article-detail .offset2{
+        margin-left: 17.094017094017094%;
+    }
 }
 
 /* Tablet to desktop
@@ -75,10 +89,6 @@ article .footer{
     body{
         padding-top: 0px;
     }
-    .navbar-fixed-top{
-        margin-bottom: 0px;
-    }
-    
     h3{
         font-size: 22px;
     }
@@ -98,10 +108,6 @@ article .footer{
     body{
         padding-top: 0px;
     }
-    .navbar-fixed-top{
-        margin-bottom: 0px;
-    }
-
     h3{
         font-size: 18px;
     }
@@ -118,9 +124,6 @@ article .footer{
 /* Smart phone
 ------------------------- */
 @media (max-width: 479px) {
-    .navbar-fixed-top{
-        margin-bottom: 0px;
-    }
     article a{
         display: block;
     }

@@ -1,0 +1,32 @@
+<div class="container-fluid" id="article-detail">
+  <div class="row-fluid">
+    <div class="span8 offset2">
+      <article>
+        <h3>
+          <a href="<%=h @article.webpage.expanded_url %>" target="_blank">
+            <%=h @article.webpage.title ? @article.webpage.title : @article.webpage.expanded_url[0..30] %>
+          </a>
+        </h3>
+        <div class="article-image-container">
+          <a href="<%=h @article.webpage.expanded_url %>" target="_blank">
+            <% if @article.webpage.opengraph != {} %>
+            <img src="<%=h @article.webpage.opengraph['image'] %>" class="article-image">
+            <% elsif @article.webpage.embed %>
+            <%= @article.webpage.embed %>
+            <% else %>
+            <img src="<%=h @article.webpage.thumb %>" width="100%" class="article-image">
+            <% end %>
+            <h3><%=h @article.webpage.title ? @article.webpage.title : @article.webpage.expanded_url[0..20] %></h3>
+          </a>
+
+        </div>
+        <ul class="tweet-list">
+          <% @article.statuses.reverse.each do |status|%>
+          <li class="tweet"><img src="<%=h status.user["profile_image_url"] %>" height="42"><p>@<%=h status.user["screen_name"] %>/<%=h status.user["name"] %><br> <%=h status.text %></p><p class="date"><%=h status.created_at %></p></li>
+          <% end %>
+        </ul>
+        <div class="footer">Article Updated At <%=h @article.updated_at %></div>
+      </article>
+    </div>
+  </div>
+</div>

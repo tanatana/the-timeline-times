@@ -69,11 +69,16 @@ class App < Sinatra::Base
 
     @articles = current_user.retrieve_articles(opts)
     @title = current_user.screen_name
-    @page_type = "recent"
     @has_next_page = (@articles.size == opts[:per_page])
     @next_page_url = "/home?page=#{opts[:page] + 1}" if @has_next_page
 
     erb :user_home
+  end
+
+  get '/home/:article_id' do
+    @article = current_user.retrieve_article(params[:article_id])
+
+    erb :article_detail
   end
 
   get '/users/:screen_name/recent' do
@@ -99,7 +104,6 @@ class App < Sinatra::Base
         :day => params[:day].to_i}).articles
 
     @title = @user.screen_name
-    @page_type = "recent"
     erb :user_home
   end
 

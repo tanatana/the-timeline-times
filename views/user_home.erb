@@ -1,10 +1,5 @@
 <div class="container-fluid">
   <div class="row-fluid">
-    <div class="span12">
-      <h1>Username's TIMELINE TIMES</h1>
-    </div>
-  </div>
-  <div class="row-fluid">
     <div class="span3">
       <div class="accordion" id="sidemenu">
         <div class="accordion-group">
@@ -60,7 +55,7 @@
           <% break if i >= 2 %>
           <% end %>
         </ul>
-        <div class="footer">Article Updated At <%=h article.updated_at %> / view detail</div>
+        <div class="footer">Article Updated At <%=h article.updated_at %> / <a href="/home/<%=h article.id %>">view detail</a></div>
       </article>
       <% end %>
     </div>

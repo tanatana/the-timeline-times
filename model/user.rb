@@ -19,4 +19,7 @@ class User
         :page => params[:page],
       })
   end
+  def retrieve_article(article_id)
+    self.articles.find(article_id)
+  end
 end
