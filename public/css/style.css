@@ -3,6 +3,10 @@
 
 /* home
 ------------------------- */
+#sidemenu {
+    position: fixed;
+}
+
 article h3{
     border: 0px #08c solid;
     border-width: 0px 0px 0px 5px;
@@ -42,9 +46,12 @@ article .footer{
 
 /* Desktop large
 ------------------------- */
-@media (min-width: 1201px) {
+@media (min-width: 1200px) {
     body{
         padding-top: 60px;
+    }
+    #sidemenu {
+        width: 270px;
     }
     .navbar-fixed-top{
         margin-bottom: 10px;
@@ -66,6 +73,9 @@ article .footer{
 @media (min-width: 980px) and (max-width: 1199px) {
     body{
         padding-top: 60px;
+    }
+    #sidemenu {
+        width: 222px;
     }
     h3{
         font-size: 24px;
@@ -89,6 +99,9 @@ article .footer{
     body{
         padding-top: 0px;
     }
+    #sidemenu {
+        width: 170px;
+    }
     h3{
         font-size: 22px;
     }
@@ -105,6 +118,9 @@ article .footer{
 /* Tablet 
 ------------------------- */
 @media (min-width: 480px) and (max-width: 779px) {
+    #sidemenu {
+        position: static;
+    }
     body{
         padding-top: 0px;
     }
@@ -124,6 +140,9 @@ article .footer{
 /* Smart phone
 ------------------------- */
 @media (max-width: 479px) {
+    #sidemenu {
+        position: static;
+    }
     article a{
         display: block;
     }
