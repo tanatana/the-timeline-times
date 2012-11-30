@@ -1,14 +1,13 @@
-$(function(){
-    var $container = $('#container');
-    var opts = {
-        isAnimated: true,
-        isFitWidth: true,
-        duration: 400,
-        columnWidth : 280,
-        itemSelector : '.item'
-    };
-
-    $container.imagesLoaded(function(){
-        $container.masonry(opts);
-    });
+$(document).ready(function() {
+	$(".various").fancybox({
+		maxWidth	: 800,
+		maxHeight	: 600,
+		fitToView	: false,
+		width		: '70%',
+		height		: '70%',
+		autoSize	: false,
+		closeClick	: false,
+		openEffect	: 'none',
+		closeEffect	: 'none'
+	});
 });

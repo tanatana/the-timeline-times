@@ -56,7 +56,8 @@
           <% end %>
         </ul>
         <div class="footer">Article Updated At <%=h article.updated_at %>
-          / <a href="/home/<%=h article.id %>"><%=h article.statuses.size > 3 ? "他に #{article.statuses.size - 3} 件のつぶやきがあります" : "詳細を見る" %></a>
+          <a class="various visible-tablet visible-desktop" data-fancybox-type="iframe" href="/home/<%=h article.id %>"><%=h article.statuses.size > 3 ? "他に #{article.statuses.size - 3} 件のつぶやきがあります" : "詳細を見る" %></a>
+          <a class="visible-phone" href="/home/<%=h article.id %>"><%=h article.statuses.size > 3 ? "他に #{article.statuses.size - 3} 件のつぶやきがあります" : "詳細を見る" %></a>
         </div>
       </article>
       <% end %>

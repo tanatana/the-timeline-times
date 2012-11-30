@@ -81,7 +81,7 @@ class App < Sinatra::Base
   get '/home/:article_id' do
     @article = current_user.retrieve_article(params[:article_id])
 
-    erb :article_detail
+    erb :article_detail, :layout => false
   end
 
   get '/home/:year/:mon/:day' do
