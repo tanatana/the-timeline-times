@@ -1,3 +1,21 @@
+function changeDisplayMode(display_mode){
+    document.cookie = "display_mode="+display_mode;
+    $('#display-container').attr("class", display_mode);
+    if(display_mode == 'image-mode'){
+        $('#article-container').removeAttr("class");
+        $('article').attr("class", "span3");
+        $('.display-mode-switcher:has(.image-mode-switch)').addClass('active');
+        $('.display-mode-switcher:has(.detail-mode-switch)').removeClass('active');
+    }
+    else if(display_mode == 'detail-mode'){
+        $('#article-container').attr("class", "span8 offset2");
+        $('article').removeAttr("class");
+        $('.display-mode-switcher:has(.image-mode-switch)').removeClass('active');
+        $('.display-mode-switcher:has(.detail-mode-switch)').addClass('active');
+    }
+    $('.image-mode .article-image-container').height($('.article-image-container').width());
+}
+
 $(document).ready(function() {
 	$(".various").fancybox({
 		maxWidth	: 800,
@@ -11,34 +29,20 @@ $(document).ready(function() {
 		closeEffect	: 'none'
 	});
 
-    // article-image-containerを初期化
+    $.autopager({
+        content: 'article', // コンテンツ部分のセレクタ 
+        link   : '#next',     // 次ページリンクのセレクタ
+        load   : function(){changeDisplayMode($.cookie('display_mode'));}
+    });
 
-    function chengeDisplayMode(display_mode){
-        document.cookie = "display_mode="+display_mode;
-        $('#display-container').attr("class", display_mode);
-        if(display_mode == 'image-mode'){
-            $('#article-container').removeAttr("class");
-            $('article').attr("class", "span3");
-            $('.display-mode-switcher:has(.image-mode-switch)').addClass('active');
-            $('.display-mode-switcher:has(.detail-mode-switch)').removeClass('active');            
-        }
-        else if(display_mode == 'detail-mode'){
-            $('#article-container').attr("class", "span8 offset2");
-            $('article').removeAttr("class");
-            $('.display-mode-switcher:has(.image-mode-switch)').removeClass('active');
-            $('.display-mode-switcher:has(.detail-mode-switch)').addClass('active');
-        }
-        $('.image-mode .article-image-container').height($('.article-image-container').width());
-    }
-
-    chengeDisplayMode($.cookie('display_mode'));
+    changeDisplayMode($.cookie('display_mode'));
 
     $('.image-mode-switch').click(function(e){
-        chengeDisplayMode("image-mode");
+        changeDisplayMode("image-mode");
         e.preventDefault();
     });
     $('.detail-mode-switch').click(function(e){
-        chengeDisplayMode("detail-mode");
+        changeDisplayMode("detail-mode");
         e.preventDefault();
     });
     // 古の昔，小さい画面にdetail-modeを強制していた時の記憶が封印されている．．．
@@ -47,10 +51,10 @@ $(document).ready(function() {
     //     var h = $(window).height();
     //     console.log("width: " + w);
     //     if(w < 780){
-    //         chengeDisplayMode("detail-mode");
+    //         changeDisplayMode("detail-mode");
     //     }
     //     else{
-    //         chengeDisplayMode(global_display_mode);
+    //         changeDisplayMode(global_display_mode);
     //     }
     // });
 });
