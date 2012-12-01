@@ -86,6 +86,23 @@ article .footer{
 .fancybox-opened .navbar.navbar-fixed-top {
     display: none;
 }
+.fancybox-opened .container-fluid .row-fluid .span12{
+    width: 80%;
+    float: none;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.fancybox-opened .fancybox-nav{
+    width: 20%;
+}
+.fancybox-opened .fancybox-nav.fancybox-next{
+    right: -10%;
+}
+.fancybox-opened .fancybox-nav.fancybox-prev{
+    left: -10%;
+}
+
 
 /* Responsive
 -------------------------------------------------- */
