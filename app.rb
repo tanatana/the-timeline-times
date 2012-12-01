@@ -78,12 +78,19 @@ class App < Sinatra::Base
     erb :user_home
   end
 
-  get '/home/:article_id' do
+  get '/home/:article_id' do    
+    @article = current_user.retrieve_article(params[:article_id])
+
+    erb :article_detail
+  end
+
+  get '/ajax/:article_id' do    
     @article = current_user.retrieve_article(params[:article_id])
 
     erb :article_detail, :layout => false
   end
 
+  
   get '/home/:year/:mon/:day' do
     opts = paginate_options(params)
 

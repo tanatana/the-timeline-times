@@ -1,28 +1,6 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, minimum-scale=1">
-    <title>
-      The Timeline Times
-      <% if @title %><%=h "| @#{@title}" %><% if @page_type %><%=h "'s #{@page_type}" %><% end %><% end %>
-    </title>
-
-    <!-- Add jQuery -->
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.2/jquery.min.js"></script>
-
-    <!-- Add Bootstrap -->
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap.min.css">
-    <link rel="stylesheet" type="text/css" href="/css/bootstrap-responsive.css">
-    <script type="text/javascript" src="/js/bootstrap.min.js"></script>
-
-    <!-- Add timeline-times.css & timeline-times.js -->
-    <link rel="stylesheet" type="text/css" href="/css/style.css">
-  </head>
-  <body>
     <div class="container-fluid" id="article-detail">
       <div class="row-fluid">
-        <div class="span8 offset2">
+        <div class="span12">
           <article>
             <h3>
               <a href="<%=h @article.webpage.expanded_url %>" target="_blank">
@@ -52,5 +30,3 @@
         </div>
       </div>
     </div>
-  </body>
-</html>
