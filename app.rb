@@ -41,6 +41,15 @@ class App < Sinatra::Base
     end
   end
 
+  # before '/*' do
+  #   if request.cookies["display_mode"] =~ /^image-mode$|^detail-mode$/
+  #     @display_mode =  request.cookies["display_mode"]
+  #   else
+  #     @display_mode = "detail-mode"
+  #   end
+  # end
+  
+  
   get '/auth/twitter/callback' do
     auth = request.env["omniauth.auth"]
     access_token = auth["extra"]["access_token"]
@@ -74,7 +83,7 @@ class App < Sinatra::Base
     @title = current_user.screen_name
     @has_next_page = (@articles.size == opts[:per_page])
     @next_page_url = "/home?page=#{opts[:page] + 1}" if @has_next_page
-    
+
     erb :user_home
   end
 
