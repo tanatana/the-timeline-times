@@ -31,8 +31,8 @@ $(document).ready(function() {
         $('.image-mode .article-image-container').height($('.article-image-container').width());
     }
 
-    chengeDisplayMode('detail-mode');
-    
+    chengeDisplayMode($.cookie('display_mode'));
+
     $('.image-mode-switch').click(function(e){
         chengeDisplayMode("image-mode");
         e.preventDefault();
@@ -41,7 +41,6 @@ $(document).ready(function() {
         chengeDisplayMode("detail-mode");
         e.preventDefault();
     });
-
     // 古の昔，小さい画面にdetail-modeを強制していた時の記憶が封印されている．．．
     // $(window).resize(function(){
     //     var w = $(window).width();

@@ -41,15 +41,6 @@ class App < Sinatra::Base
     end
   end
 
-  # before '/*' do
-  #   if request.cookies["display_mode"] =~ /^image-mode$|^detail-mode$/
-  #     @display_mode =  request.cookies["display_mode"]
-  #   else
-  #     @display_mode = "detail-mode"
-  #   end
-  # end
-  
-  
   get '/auth/twitter/callback' do
     auth = request.env["omniauth.auth"]
     access_token = auth["extra"]["access_token"]
