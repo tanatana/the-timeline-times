@@ -1,10 +1,22 @@
 @charset "utf-8";
 
-
-/* home
+/* global
 ------------------------- */
+body{
+    background-image: url('/css/image/background.jpg');
+}
+
 #sidemenu {
     position: fixed;
+}
+
+article{
+/*    padding: 13px 0px 8px 0px;
+    border-radius: 10px;
+    margin-bottom: 13px;
+    background-image: url('/css/image/fabric.png');*/
+    background-color: #fff;
+    margin-bottom: 20px;
 }
 
 article h3{
@@ -41,6 +53,40 @@ article .footer{
     text-align: right;
 }
 
+.container-fluid .full-width{
+    margin-left: -15px;
+    margin-right: -15px;
+    padding-left: 15px;
+    padding-right: 15px;
+}
+
+/* index
+------------------------- */
+#index .row-fluid{
+    margin-bottom: 20px;
+}
+
+#index .row-fluid [class*="span"]{
+}
+
+#index .row-fluid .thumbnails .thumbnail{
+    background-color: #fff;
+}
+
+#index .footer{
+    color: #eee;
+    background-image: url('/css/image/background.png');
+    box-shadow: inset 0 10px 8px #333;
+    padding-top: 20px;
+    padding-bottom: 40px;
+}
+#index .footer .row-fluid [class*="span"]{
+    background-color: transparent;
+}
+
+/* home
+------------------------- */
+
 /* home
    .image-mode
 ------------------------- */
@@ -56,6 +102,7 @@ article .footer{
     display: none;
 }
 .image-mode article .article-image-container{
+    background-color: #fff;
     position: relative;
     overflow: hidden;
     width: 100%; !important
@@ -83,23 +130,23 @@ article .footer{
 
 /* fancybox
 ------------------------- */
-.fancybox-opened .navbar.navbar-fixed-top {
+.fancybox-inner .navbar.navbar-fixed-top {
     display: none;
 }
-.fancybox-opened .container-fluid .row-fluid .span12{
+.fancybox-inner .container-fluid .row-fluid .span12{
     width: 80%;
     float: none;
     margin-left: auto;
     margin-right: auto;
 }
 
-.fancybox-opened .fancybox-nav{
+.fancybox-outer .fancybox-nav{
     width: 20%;
 }
-.fancybox-opened .fancybox-nav.fancybox-next{
+.fancybox-outer .fancybox-nav.fancybox-next{
     right: -10%;
 }
-.fancybox-opened .fancybox-nav.fancybox-prev{
+.fancybox-outer .fancybox-nav.fancybox-prev{
     left: -10%;
 }
 
