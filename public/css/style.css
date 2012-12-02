@@ -30,9 +30,11 @@ article .article-status{
 article .article-image-container{
     overflow: hidden;
 }
-
 article .article-image-container h3{
     display: none;
+}
+article .article-image-container img{
+    width: 100%;
 }
 article .tweet-list{
     list-style: none;
