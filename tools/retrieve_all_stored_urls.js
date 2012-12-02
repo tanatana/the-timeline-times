@@ -1,0 +1,1 @@
+db.webpages.find().forEach(function(x){print(x.expanded_url)});
