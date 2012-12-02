@@ -1,17 +1,32 @@
+function selectSuitableSpanwidthInImageMode(width){
+    if(width < 1600){
+        $('article').removeClass("span2");
+        $('article').addClass("span3");
+        $('.image-mode article:nth-child(6n+1)').removeAttr('style');
+        $('.image-mode article:nth-child(4n+1)').css('margin-left', '0px');
+    } else {
+        $('article').addClass("span2");
+        $('article').removeClass("span3");
+        $('.image-mode article:nth-child(4n+1)').removeAttr('style');
+        $('.image-mode article:nth-child(6n+1)').css('margin-left', '0px');
+    }
+}
+
 function changeDisplayMode(display_mode){
     document.cookie = "display_mode="+display_mode;
     $('#display-container').attr("class", display_mode);
     if(display_mode == 'image-mode'){
         $('#article-container').removeAttr("class");
-        $('article').attr("class", "span3");
         $('.display-mode-switcher:has(.image-mode-switch)').addClass('active');
         $('.display-mode-switcher:has(.detail-mode-switch)').removeClass('active');
+        var w = $(window).width();
+        selectSuitableSpanwidthInImageMode(w);
     }
     else if(display_mode == 'detail-mode'){
         $('#article-container').attr("class", "span8 offset2");
-        $('article').removeAttr("class");
         $('.display-mode-switcher:has(.image-mode-switch)').removeClass('active');
         $('.display-mode-switcher:has(.detail-mode-switch)').addClass('active');
+        $('article').removeAttr("class");
     }
     $('.image-mode .article-image-container').height($('.article-image-container').width());
 }
@@ -59,8 +74,6 @@ $(document).ready(function() {
             url: pickupBtn.attr('href'),
             dataType: 'json',
             success: function(data){
-                console.log(data.pickup);
-
                 // 順調に進んだら上書きする
                 if(data.pickup){
                     pickupBtn.addClass('active');
@@ -71,7 +84,6 @@ $(document).ready(function() {
             error: function(data){
                 // エラーが発生したらボタンを元に戻す
                 pickupBtn.toggleClass('active');
-                console.log(data);
             }
         });
         e.preventDefault();
@@ -93,12 +105,16 @@ $(document).ready(function() {
 
 $(window).resize(function(){
     console.log(".article-image-container is resized!!");
-    var w = $('.article-image-container').width();
-    $('.article-image-container').height(w);
-    if(w < 780){
+    var article_width = $('.article-image-container').width();
+    $('.article-image-container').height(article_width);
+    // あんまり画面が小さかったら新しい画面でちゃんと詳細を出してあげる
+    if(article_width < 780){
         $('.open-detail').addClass("various fancybox.ajax")
     } else {
         $('.open-detail').removeClass("various fancybox.ajax")
     }
+    var window_width = $(window).width();
+    // あんまり画面がでかくなったら横6列表示にしてあげる
+    selectSuitableSpanwidthInImageMode(window_width);
 });
     

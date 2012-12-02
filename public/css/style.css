@@ -97,9 +97,9 @@ article .footer{
     overflow: hidden;
 }
 
-.image-mode article:nth-child(4n+1){
-    margin-left: 0px;
-}
+/* .image-mode article:nth-child(4n+1){ */
+/*     margin-left: 0px; */
+/* } */
 
 .image-mode article h3{
     display: none;
