@@ -71,11 +71,10 @@ class App < Sinatra::Base
     opts = paginate_options(params)
 
     @articles = current_user.retrieve_articles(opts)
-    @title = current_user.screen_name
     @has_next_page = (@articles.size == opts[:per_page])
     @next_page_url = "/home?page=#{opts[:page] + 1}" if @has_next_page
 
-    erb :user_home
+    erb :home
   end
 
   get '/home/article/:article_id' do    
@@ -96,7 +95,7 @@ class App < Sinatra::Base
     @articles = articles_in_date[((opts[:page] - 1) * 50)..((opts[:page] * 50) - 1)]
     @has_next_page = (@articles.size == opts[:per_page])
     @next_page_url = "/home/#{params[:year]}/#{params[:mon]}/#{params[:day]}?page=#{opts[:page] + 1}" if @has_next_page
-    erb :user_home
+    erb :home
   end
 
 

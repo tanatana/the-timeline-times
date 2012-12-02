@@ -2,32 +2,32 @@
   <div class="container-fluid">
     <div class="row-fluid">
       <!-- <div class="span3"> -->
-      <!--   <div class="accordion" id="sidemenu"> -->
-      <!--     <div class="accordion-group"> -->
-      <!--       <div class="accordion-heading"> -->
-      <!--         <a class="accordion-toggle" data-toggle="collapse" data-parent="#sidemenu" href="#collapseOne"> -->
-      <!--           表示オプション -->
-      <!--         </a> -->
-      <!--       </div> -->
-      <!--       <div id="collapseOne" class="accordion-body collapse in"> -->
-      <!--         <div class="accordion-inner"> -->
-      <!--           Anim pariatur cliche... -->
-      <!--         </div> -->
-      <!--       </div> -->
-      <!--     </div> -->
-      <!--     <div class="accordion-group"> -->
-      <!--       <div class="accordion-heading"> -->
-      <!--         <a class="accordion-toggle" data-toggle="collapse" data-parent="#sidemenu" href="#collapseTwo"> -->
-      <!--           カレンダー -->
-      <!--         </a> -->
-      <!--       </div> -->
-      <!--       <div id="collapseTwo" class="accordion-body collapse"> -->
-      <!--         <div class="accordion-inner"> -->
-      <!--           Anim pariatur cliche... -->
-      <!--         </div> -->
-      <!--       </div> -->
-      <!--     </div> -->
-      <!--   </div> -->
+      <!-- <div class="accordion" id="sidemenu"> -->
+      <!-- <div class="accordion-group"> -->
+      <!-- <div class="accordion-heading"> -->
+      <!-- <a class="accordion-toggle" data-toggle="collapse" data-parent="#sidemenu" href="#collapseOne"> -->
+      <!-- 表示オプション -->
+      <!-- </a> -->
+      <!-- </div> -->
+      <!-- <div id="collapseOne" class="accordion-body collapse in"> -->
+      <!-- <div class="accordion-inner"> -->
+      <!-- Anim pariatur cliche... -->
+      <!-- </div> -->
+      <!-- </div> -->
+      <!-- </div> -->
+      <!-- <div class="accordion-group"> -->
+      <!-- <div class="accordion-heading"> -->
+      <!-- <a class="accordion-toggle" data-toggle="collapse" data-parent="#sidemenu" href="#collapseTwo"> -->
+      <!-- カレンダー -->
+      <!-- </a> -->
+      <!-- </div> -->
+      <!-- <div id="collapseTwo" class="accordion-body collapse"> -->
+      <!-- <div class="accordion-inner"> -->
+      <!-- Anim pariatur cliche... -->
+      <!-- </div> -->
+      <!-- </div> -->
+      <!-- </div> -->
+      <!-- </div> -->
       <!-- </div> -->
       <div id="article-container">
         <% @articles.each do |article| %>
@@ -40,10 +40,10 @@
           <div class="article-status">
             <% if article.pickup %>
             <a href="/api/article/pickup/<%=h article.id %>" class="btn active pickup">
-            <% else %>
-            <a href="/api/article/pickup/<%=h article.id %>" class="btn pickup">
-            <% end %>
-            <b class="icon-thumbs-up"></b> pickup!</a></div>
+              <% else %>
+              <a href="/api/article/pickup/<%=h article.id %>" class="btn pickup">
+                <% end %>
+                <b class="icon-thumbs-up"></b> pickup!</a></div>
           <div class="article-image-container">
             <a href="<%=h article.webpage.expanded_url %>" target="_blank">
               <% if article.webpage.opengraph != {} %>
