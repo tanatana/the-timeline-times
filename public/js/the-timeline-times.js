@@ -45,6 +45,16 @@ $(document).ready(function() {
         changeDisplayMode("detail-mode");
         e.preventDefault();
     });
+
+    $('.pickup').click(function(e){
+        var self = $(this);
+        $.get($(this).attr('href'), function(data){
+            console.log(data);
+            self.toggleClass('active');
+        });
+        e.preventDefault();
+    });
+
     // 古の昔，小さい画面にdetail-modeを強制していた時の記憶が封印されている．．．
     // $(window).resize(function(){
     //     var w = $(window).width();

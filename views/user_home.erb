@@ -37,6 +37,13 @@
               <%=h article.webpage.title ? article.webpage.title : article.webpage.expanded_url[0..30] %>
             </a>
           </h3>
+          <div class="article-status">
+            <% if article.pickup %>
+            <a href="/api/article/pickup/<%=h article.id %>" class="btn active pickup">
+            <% else %>
+            <a href="/api/article/pickup/<%=h article.id %>" class="btn pickup">
+            <% end %>
+            <b class="icon-thumbs-up"></b> pickup!</a></div>
           <div class="article-image-container">
             <a href="<%=h article.webpage.expanded_url %>" target="_blank">
               <% if article.webpage.opengraph != {} %>
@@ -56,7 +63,8 @@
             <% break if i >= 2 %>
             <% end %>
           </ul>
-          <div class="footer">Article Updated At <%=h article.updated_at %>
+          <div class="footer">
+            Article Updated At <%=h article.updated_at %>
             <a class="various fancybox.ajax visible-tablet visible-desktop" rel="articles" href="/ajax/article/<%=h article.id %>"><%=h article.statuses.size > 3 ? "他に #{article.statuses.size - 3} 件のつぶやきがあります" : "詳細を見る" %></a>
             <a class="visible-phone" href="/home/article/<%=h article.id %>"><%=h article.statuses.size > 3 ? "他に #{article.statuses.size - 3} 件のつぶやきがあります" : "詳細を見る" %></a>
           </div>

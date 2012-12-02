@@ -17,13 +17,15 @@ article{
     background-color: #fff;
     margin-bottom: 20px;
 }
-
 article h3{
     border: 0px #08c solid;
     border-width: 0px 0px 0px 5px;
     padding: 9px 0px 3px 5px;
     margin-bottom: 5px;
     line-height: 1.2;
+}
+article .article-status{
+    text-align: right;
 }
 article .article-image-container{
     overflow: hidden;
