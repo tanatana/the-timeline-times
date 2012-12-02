@@ -67,6 +67,10 @@ class App < Sinatra::Base
     redirect '/' unless login?
   end  
 
+  before '/api*' do
+    redirect '/' unless login?
+  end  
+
   get '/home' do
     opts = paginate_options(params)
 
@@ -78,13 +82,13 @@ class App < Sinatra::Base
     erb :user_home
   end
 
-  get '/home/:article_id' do    
+  get '/home/article/:article_id' do    
     @article = current_user.retrieve_article(params[:article_id])
 
     erb :article_detail
   end
 
-  get '/ajax/:article_id' do    
+  get '/api/article/:article_id' do    
     @article = current_user.retrieve_article(params[:article_id])
 
     erb :article_detail, :layout => false
