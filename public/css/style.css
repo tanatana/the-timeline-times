@@ -138,6 +138,9 @@ article .footer{
     margin-left: auto;
     margin-right: auto;
 }
+.fancybox-inner .container-fluid .row-fluid article{
+    background-color: transparent;
+}
 
 .fancybox-outer .fancybox-nav{
     width: 20%;

@@ -59,15 +59,11 @@ class App < Sinatra::Base
   end
 
   get '/' do
-    redirect 'home' if login?
+    redirect '/home' if login?
     erb :index
   end
 
-  before '/home*' do
-    redirect '/' unless login?
-  end  
-
-  before '/api*' do
+  before %r{/home|/ajax|/api} do
     redirect '/' unless login?
   end  
 
@@ -88,13 +84,6 @@ class App < Sinatra::Base
     erb :article_detail
   end
 
-  get '/api/article/:article_id' do    
-    @article = current_user.retrieve_article(params[:article_id])
-
-    erb :article_detail, :layout => false
-  end
-
-  
   get '/home/:year/:mon/:day' do
     opts = paginate_options(params)
 
@@ -110,14 +99,26 @@ class App < Sinatra::Base
     erb :user_home
   end
 
-  get '/users/:screen_name/recent' do
-    "move to '/home'(require sign-in)"
+
+  get '/ajax/article/:article_id' do
+    @article = current_user.retrieve_article(params[:article_id])
+
+    erb :article_detail, :layout => false
   end
 
-  get '/users/:screen_name/:year/:mon/:day/' do
-    "move to '/home/:year/:mon/:day'(require sign-in)"
-  end
+  get '/api/article/pickup/:article_id' do
+    @article = current_user.retrieve_article(params[:article_id])
+    unless @article.pickup
+      @article.pickup = true
+    else
+      @article.pickup = false
+    end
+      
+    @article.save
 
+    return @article.to_json
+  end
+  
   get '/api/articles/recent' do
     "このAPIはセキュリティ上の問題が報告されているため一時的に利用できません"
   end
