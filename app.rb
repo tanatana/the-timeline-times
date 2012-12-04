@@ -9,6 +9,18 @@ require 'erb'
 
 CONSUMER_KEY, CONSUMER_SECRET = File.open("consumer.cfg").read.split("\n")
 
+class Time 
+  def timezone(timezone = 'UTC')
+    old = ENV['TZ']
+    utc = self.dup.utc
+    ENV['TZ'] = timezone
+    output = utc.localtime
+    ENV['TZ'] = old
+    output
+  end
+end
+
+
 class App < Sinatra::Base
   configure do
     include ERB::Util
