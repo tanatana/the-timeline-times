@@ -75,9 +75,29 @@ class App < Sinatra::Base
     erb :index
   end
 
-  before %r{/home|/ajax|/api} do
+  get '/users/:screen_name' do
+    opts = paginate_options(params)
+
+    target_user = User.find_by_screen_name(params[:screen_name])
+
+    return "user not found" unless target_user
+    
+    @articles = target_user.retrieve_pickedup_articles(opts)
+    @has_next_page = (@articles.size == opts[:per_page])
+    @next_page_url = "/home?page=#{opts[:page] + 1}" if @has_next_page
+
+    erb :home
+    
+  end
+
+  
+  before %r{/home|/ajax} do
     redirect '/' unless login?
-  end  
+  end
+  before '/api*' do
+    return "Error: "
+  end
+  
 
   get '/home' do
     opts = paginate_options(params)
