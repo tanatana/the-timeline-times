@@ -82,7 +82,7 @@ function showAlert(level, message, limit){
         }
     }, 1000);
     window.setTimeout(function(){
-        var disappearPoint = notify.height() * -1.5;
+        var disappearPoint = (notify.height() * -1) - 20;
         notify.animate({marginTop: disappearPoint, opacity: 0}, 300, function(){
             notify.alert('close');
         });
