@@ -3,6 +3,7 @@
 /* global
 ------------------------- */
 body{
+    background-image: url('/css/image/cream_dust.png');
 }
 
 #sidemenu {
@@ -10,12 +11,13 @@ body{
 }
 
 article{
-/*    padding: 13px 0px 8px 0px;
-    border-radius: 10px;
+    padding: 13px 15px 5px 15px;
+    border-radius: 13px;
     margin-bottom: 13px;
-    background-image: url('/css/image/fabric.png');*/
     background-color: #fff;
+    background-image: url('/css/image/fabric.png');
     margin-bottom: 20px;
+    box-shadow: 0px 3px 5px #999;
 }
 article h3{
     border: 0px #08c solid;
@@ -89,12 +91,28 @@ article .footer{
 
 /* home
 ------------------------- */
+#notify-block{
+    position: fixed;
+    width: 80%;
+    top: 40px;
+    left: 10%;
+    z-index: 100;
+}
+#notify-block .alert{
+}
+
+#notify-block .alert p{
+    margin-bottom: 0;
+}
+
 
 /* home
    .image-mode
 ------------------------- */
 .image-mode article{
     overflow: hidden;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 /* .image-mode article:nth-child(4n+1){ */
@@ -110,6 +128,22 @@ article .footer{
     overflow: hidden;
     width: 100%; !important
 }
+.image-mode article .article-image-container .article-status{
+    display: block;
+    position: absolute;
+    top: 0px;
+    right: 0px;
+    padding: 5px 10px;
+    width: 100%;
+    background-color: rgba(0,0,0,0.6);
+    opacity: 0;
+}
+.image-mode article .article-image-container .article-status a{
+    font-weight: normal;
+    color: #fff;
+}
+
+
 .image-mode article .article-image-container h3{
     font-size: 20px;
     display: block;
@@ -117,12 +151,17 @@ article .footer{
     bottom: 0px;
     left: 0px;
     right: 0px;
-    padding: 5px;
+    padding: 30px 5px 5px 5px;
     margin-bottom: 0px;
     border: 0px #000 solid;
-    border-width: 2px 0px 0px 0px;
-    background-color: rgba(0,0,0,0.75);
     color: #fff;
+    font-weight: normal;
+    background-image: url('/css/image/image-mode_article_h3.png');
+    /* background-image: -webkit-gradient(linear, left top, left bottom, color-stop(0%, transparent), color-stop(100%, #000)); */
+    /* background-image: -webkit-linear-gradient(top, transparent, #000); */
+    /* background-image: -moz-linear-gradient(top, transparent, #000); */
+    /* background-image: -ms-linear-gradient(top, transparent, #000); */
+    /* background-image: -o-linear-gradient(top, transparent, #000); */
  }
 .image-mode article .tweet-list{
     display: none;

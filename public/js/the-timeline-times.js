@@ -31,8 +31,56 @@ function changeDisplayMode(display_mode){
     $('.image-mode .article-image-container').height($('.article-image-container').width());
 }
 
-function notify(){
-    
+function toggleStar(starIcon){
+    if(starIcon.hasClass('icon-star')){
+        starIcon.removeClass('icon-star');
+        starIcon.addClass('icon-star-empty');
+    } else {
+        starIcon.addClass('icon-star');
+        starIcon.removeClass('icon-star-empty');
+    }
+}
+
+function setArticleStatusbar(){
+    $('.image-mode article').hover(
+        function(){
+            $(this).find('.article-status').stop(true).animate({opacity: 1}, 100);
+        },
+        function(){
+            $(this).find('.article-status').animate({opacity: 0}, 400);
+        }
+    );
+}
+
+function showNotify(level, message){
+    console.log('showMyNotify called/ level:' + level + ' message: ' + message);
+    var notify = $('<div class="alert"><button type="button" class="close" data-dismiss="alert">×</button></div>');
+    if (level == 'error'){
+        notify.addClass('alert-error');
+        notify.append('<h4>致命的なエラー</h4> ');
+    } else if(level == 'warn'){
+        notify.append('<h4>エラー</h4> ');
+    } else if(level == 'success'){
+        notify.addClass('alert-success');
+        notify.append('<h4>おめでとうございます</h4> ');
+    } else if(level == 'info'){
+        notify.addClass('alert-info');
+        notify.append('<h4>ニュース</h4> ');
+    }
+    notify.append('<p>' + message + '</p>');
+    notify.append('<p style="text-align: right;">このウィンドウは 3 秒後に自動的に閉じます．</p>');
+    notify.css({marginTop: $(window).height()});
+    notify.appendTo('#notify-block');
+    notify.animate({
+        marginTop: 10,
+        opacity: 0.9
+    }, { duration: 500, easing: 'easeOutQuad'});
+    window.setTimeout(function(){
+        var disappearPoint = notify.height() * -1.5;
+        notify.animate({marginTop: disappearPoint, opacity: 0}, 300, function(){
+            notify.alert('close');
+        });
+    }, 3000);
 }
 
 $(document).ready(function() {
@@ -51,11 +99,16 @@ $(document).ready(function() {
     $.autopager({
         content: 'article', // コンテンツ部分のセレクタ 
         link   : '#next',     // 次ページリンクのセレクタ
-        load   : function(){changeDisplayMode($.cookie('display_mode'));}
+        load   : function(){
+            changeDisplayMode($.cookie('display_mode'));
+            setArticleStatusbar();
+        }
     });
 
     changeDisplayMode($.cookie('display_mode'));
 
+    setArticleStatusbar();
+    
     $('.image-mode-switch').click(function(e){
         changeDisplayMode("image-mode");
         e.preventDefault();
@@ -69,7 +122,7 @@ $(document).ready(function() {
         var pickupBtn = $(this);
         // ボタンを先にトグルしておく
         pickupBtn.toggleClass('active');
-
+        toggleStar(pickupBtn.children('b'));
         $.ajax({
             url: pickupBtn.attr('href'),
             dataType: 'json',
@@ -77,13 +130,21 @@ $(document).ready(function() {
                 // 順調に進んだら上書きする
                 if(data.pickup){
                     pickupBtn.addClass('active');
+                    pickupBtn.addClass('icon-star');
+                    pickupBtn.removeClass('icon-star-empty');
                 } else {
                     pickupBtn.removeClass('active');
+                    pickupBtn.removeClass('icon-star');
+                    pickupBtn.addClass('icon-star-empty');
+
                 }
+                // showNotify('success', '正常に処理が完了しました');
             },
             error: function(data){
                 // エラーが発生したらボタンを元に戻す
                 pickupBtn.toggleClass('active');
+                toggleStar(pickupBtn.children('b'));
+                showNotify('error', 'oops! something wrong!');
             }
         });
         e.preventDefault();
@@ -117,4 +178,3 @@ $(window).resize(function(){
     // あんまり画面がでかくなったら横6列表示にしてあげる
     selectSuitableSpanwidthInImageMode(window_width);
 });
-    
