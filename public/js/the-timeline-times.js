@@ -52,7 +52,7 @@ function setArticleStatusbar(){
     );
 }
 
-function showAlert(level, message){
+function showAlert(level, message, limit){
     var notify = $('<div class="alert"><button type="button" class="close" data-dismiss="alert">×</button></div>');
     if (level == 'error'){
         notify.addClass('alert-error');
@@ -67,7 +67,7 @@ function showAlert(level, message){
         notify.append('<h4>ニュース</h4> ');
     }
     notify.append('<p>' + message + '</p>');
-    notify.append('<p style="text-align: right;">このウィンドウは <span class="sec">3</span> 秒後に自動的に閉じます．</p>');
+    notify.append('<p style="text-align: right;">このウィンドウは <span class="sec">'+ limit/1000 +'</span> 秒後に自動的に閉じます．</p>');
     notify.css({marginTop: $(window).height()});
     notify.appendTo('#notify-block');
     notify.animate({
@@ -75,10 +75,9 @@ function showAlert(level, message){
         opacity: 0.9
     }, { duration: 500, easing: 'easeOutQuad'});
     var countDown = setInterval(function(){
-        var sec = Number(notify.find('.sec').text());            
+        var sec = Number(notify.find('.sec').text());
         notify.find('.sec').text((sec - 1).toString());
         if ((sec - 1) <= 0){
-            console.log(sec-1);
             clearInterval(countDown);
         }
     }, 1000);
@@ -87,7 +86,7 @@ function showAlert(level, message){
         notify.animate({marginTop: disappearPoint, opacity: 0}, 300, function(){
             notify.alert('close');
         });
-    }, 3000);
+    }, limit);
 }
 
 $(document).ready(function() {
@@ -145,13 +144,13 @@ $(document).ready(function() {
                     pickupBtn.addClass('icon-star-empty');
 
                 }
-                // showAlert('success', '正常に処理が完了しました');
+                // showAlert('success', '正常に処理が完了しました', 3000);
             },
             error: function(data){
                 // エラーが発生したらボタンを元に戻す
                 pickupBtn.toggleClass('active');
                 toggleStar(pickupBtn.children('b'));
-                showAlert('error', 'oops! something wrong!');
+                showAlert('error', 'oops! something wrong!', 3000);
             }
         });
         e.preventDefault();
