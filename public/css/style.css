@@ -93,9 +93,9 @@ article .footer{
 ------------------------- */
 #notify-block{
     position: fixed;
-    width: 80%;
+    width: 30%;
     top: 40px;
-    left: 10%;
+    right: 15px;
     z-index: 100;
 }
 #notify-block .alert{
