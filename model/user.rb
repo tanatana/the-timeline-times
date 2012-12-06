@@ -19,7 +19,18 @@ class User
         :page => params[:page],
       })
   end
+
   def retrieve_article(article_id)
     self.articles.find(article_id)
   end
+
+  def retrieve_pickedup_articles(params)
+    self.articles.paginate({
+        :pickup => true,
+        :order => :updated_at.desc,
+        :per_page => params[:per_page],
+        :page => params[:page],
+      })
+  end
+
 end
