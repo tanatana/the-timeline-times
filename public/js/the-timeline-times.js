@@ -52,8 +52,7 @@ function setArticleStatusbar(){
     );
 }
 
-function showNotify(level, message){
-    console.log('showMyNotify called/ level:' + level + ' message: ' + message);
+function showAlert(level, message){
     var notify = $('<div class="alert"><button type="button" class="close" data-dismiss="alert">×</button></div>');
     if (level == 'error'){
         notify.addClass('alert-error');
@@ -68,13 +67,21 @@ function showNotify(level, message){
         notify.append('<h4>ニュース</h4> ');
     }
     notify.append('<p>' + message + '</p>');
-    notify.append('<p style="text-align: right;">このウィンドウは 3 秒後に自動的に閉じます．</p>');
+    notify.append('<p style="text-align: right;">このウィンドウは <span class="sec">3</span> 秒後に自動的に閉じます．</p>');
     notify.css({marginTop: $(window).height()});
     notify.appendTo('#notify-block');
     notify.animate({
         marginTop: 10,
         opacity: 0.9
     }, { duration: 500, easing: 'easeOutQuad'});
+    var countDown = setInterval(function(){
+        var sec = Number(notify.find('.sec').text());            
+        notify.find('.sec').text((sec - 1).toString());
+        if ((sec - 1) <= 0){
+            console.log(sec-1);
+            clearInterval(countDown);
+        }
+    }, 1000);
     window.setTimeout(function(){
         var disappearPoint = notify.height() * -1.5;
         notify.animate({marginTop: disappearPoint, opacity: 0}, 300, function(){
@@ -138,13 +145,13 @@ $(document).ready(function() {
                     pickupBtn.addClass('icon-star-empty');
 
                 }
-                // showNotify('success', '正常に処理が完了しました');
+                // showAlert('success', '正常に処理が完了しました');
             },
             error: function(data){
                 // エラーが発生したらボタンを元に戻す
                 pickupBtn.toggleClass('active');
                 toggleStar(pickupBtn.children('b'));
-                showNotify('error', 'oops! something wrong!');
+                showAlert('error', 'oops! something wrong!');
             }
         });
         e.preventDefault();
