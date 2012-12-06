@@ -1,14 +1,17 @@
 function selectSuitableSpanwidthInImageMode(width){
-    if(width < 1600){
-        $('article').removeClass("span2");
-        $('article').addClass("span3");
-        $('.image-mode article:nth-child(6n+1)').removeAttr('style');
-        $('.image-mode article:nth-child(4n+1)').css('margin-left', '0px');
-    } else {
-        $('article').addClass("span2");
-        $('article').removeClass("span3");
-        $('.image-mode article:nth-child(4n+1)').removeAttr('style');
-        $('.image-mode article:nth-child(6n+1)').css('margin-left', '0px');
+
+    if ($.cookie('display_mode') != 'detail-mode'){
+        if(width < 1600){
+            $('article').removeClass("span2");
+            $('article').addClass("span3");
+            $('.image-mode article:nth-child(6n+1)').removeAttr('style');
+            $('.image-mode article:nth-child(4n+1)').css('margin-left', '0px');
+        } else {
+            $('article').addClass("span2");
+            $('article').removeClass("span3");
+            $('.image-mode article:nth-child(4n+1)').removeAttr('style');
+            $('.image-mode article:nth-child(6n+1)').css('margin-left', '0px');
+        }
     }
 }
 
@@ -181,6 +184,6 @@ $(window).resize(function(){
         $('.open-detail').removeClass("various fancybox.ajax")
     }
     var window_width = $(window).width();
-    // あんまり画面がでかくなったら横6列表示にしてあげる
+    // あんまり画面がでかくなったら横6列表示にしてあげる    
     selectSuitableSpanwidthInImageMode(window_width);
 });
