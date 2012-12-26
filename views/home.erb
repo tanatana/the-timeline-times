@@ -54,7 +54,7 @@
               <a href="/api/article/pickup/<%=h article.id %>" class="pickup <%=h 'active' if article.pickup %>">
                 <b class="<%=h article.pickup ? 'icon-star' : 'icon-star-empty' %> icon-white"></b></a></div>
             <a href="<%=h article.webpage.expanded_url %>" target="_blank">
-              <h3><%=h article.webpage.title[0..35] %><%=h "..." if article.webpage.title.length > 35 %></h3>
+              <h3><%=h article.webpage.title %></h3>
             </a>
           </div>
           <ul class="tweet-list">
